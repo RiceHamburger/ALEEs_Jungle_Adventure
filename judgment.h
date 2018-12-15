@@ -12,6 +12,9 @@ void Judgment_Bullet_vs_Player(void);
 bool Judgment_Player_vs_Tree(D3DXVECTOR2 vec);
 void Judgment_Player_vs_Enemy(void);
 
+//item
+void Judgment_Tonic_vs_Player(void);
+
 //boss
 void Judgment_Bullet_vs_Boss(void);
 void Judgment_Player_vs_Boss(void);

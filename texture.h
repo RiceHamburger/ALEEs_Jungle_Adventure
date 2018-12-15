@@ -26,7 +26,8 @@ typedef enum {
 	BOSS_HPBAR,
 	BOSS_UI,
 	BOSS_BIG_BULLET,
-	NUMBER_END
+	NUMBER_END,
+	TONIC
 }TEXTURE_NAME;
 
 int Texture_Load(void);

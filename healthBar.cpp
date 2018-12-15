@@ -26,9 +26,17 @@ void Healthbar_Draw(float x, float y, int nowHealth)
 {
 	//show percent
 	if (nowHealth != oldHealth) {
-		oldHealth -= (oldHealth - nowHealth);
-		if (oldHealth <= 0) {
-			oldHealth = 0;
+		if (nowHealth < oldHealth) {
+			oldHealth -= (oldHealth - nowHealth);
+			if (oldHealth <= 0) {
+				oldHealth = 0;
+			}
+		}
+		else {
+			oldHealth += (nowHealth - oldHealth);
+			if (oldHealth >= HEALTHBAR_TOTAL) {
+				oldHealth = HEALTHBAR_TOTAL;
+			}
 		}
 		percent = oldHealth / HEALTHBAR_TOTAL;
 	}

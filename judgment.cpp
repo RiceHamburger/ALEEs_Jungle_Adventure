@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "judgment.h"
 #include "bullet_Manager.h"
 #include "enemy_Manager.h"
@@ -5,6 +6,7 @@
 #include "Level1_Manager.h"
 #include "tree_Manager.h"
 #include "sound.h"
+#include "tonic_Manager.h"
 
 static RECT endArea = { 2283,449,2424,510 };
 
@@ -48,6 +50,15 @@ void Judgment_Bullet_vs_Enemy(void) {
 							PlaySound(SOUND_LABEL_SE_EXPLOSION);
 							Enemys[j].EnemyDestroy();
 							Explosion_Create(Enemys[j].GetPosition().x - Enemys[j].GetWidth() / 2, Enemys[j].GetPosition().y - Enemys[j].GetHeight() / 2);
+							
+							//乱数でアイテムを出す
+							int min = 1;
+							int max = 10;
+							int seed = rand() % (max - min + 1) + min;
+							if (seed <= 5) {
+								Tonic_Create(Enemys[j].GetPosition().x + Enemys[j].GetWidth() / 2, Enemys[j].GetPosition().y + Enemys[j].GetHeight() / 2);
+							}
+
 							p_Player->AddScore(Enemys[j].GetScore() * 20);
 						}
 						
@@ -318,6 +329,33 @@ void Judgment_BigBullet_vs_Player(void) {
 				else {
 					PlaySound(SOUND_LABEL_SE_PLAYERDIE);
 					LevelClear();
+				}
+			}
+		}
+	}
+}
+
+void Judgment_Tonic_vs_Player(void) {
+	Player *p_Player = GetPlayer();
+
+	if (!Tonic_IsEnable() || p_Player->GetInvincible()) {
+		return;
+	}
+
+	Tonic *Tonics = TonicMgrGetTonic();
+
+
+	for (int i = 0;i < ENEMY_BULLET_MAX;i++) {
+		if (Tonics[i].GetLiveFlag()) {
+			if (Collision_HitCircle(Tonics[i].GetCircleCollision(), p_Player->GetCircleCollision())) {
+				//当たってる
+				Tonics[i].TonicDestroy();
+				p_Player->SetLife(p_Player->GetLife() + Tonics[i].GetAddHealth());
+
+				PlaySound(SOUND_LABEL_SE_ITEM);
+
+				if (p_Player->GetLife() > 200) {
+					p_Player->SetLife(200);
 				}
 			}
 		}

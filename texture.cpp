@@ -31,7 +31,8 @@ static const TextureFileData TEXTURE_FILE_LISE[] = {
 	{ "texture/bossbloodLine.png",700,20 },
 	{ "texture/boss_UI.png",1024,64 },
 	{ "texture/boss_bullet.png",128,128 },
-	{ "texture/number_end.png",320,32}
+	{ "texture/number_end.png",320,32},
+	{ "texture/health.png",16,16 }
 };
 
 static const int TEXTURE_MAX = ARRAYSIZE(TEXTURE_FILE_LISE);

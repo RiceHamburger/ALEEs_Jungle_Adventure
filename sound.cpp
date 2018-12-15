@@ -47,6 +47,7 @@ SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 	{"sound/MEOW.WAV", 0 },			// ÉvÉåÅ[ÉÑÅ[DIE
 	{"sound/DYNAMITE.WAV", 0 },		// BOSSíeî≠éÀâπ
 	{"sound/Effect49.wav", 0 },		// BOSS DIE
+	{ "sound/8.wav", 0 },			// ITEM
 };
 
 //=============================================================================
