@@ -2,13 +2,13 @@
 #define WATER_STAIN_H
 
 #include "common.h"
-#include "direct3d_setup.h"
+#include "D3Dsetup.h"
 
 #define WATER_WIDTH	(64)
 #define WATER_HEIGHT (64)
 #define WATER_MAX	(4)
 #define WATER_TEXTURE_MAX	(3)
-#define WATER_ANI_TIME	(20)
+#define WATER_ANI_TIME	(200)
 
 class WaterStain {
 private:

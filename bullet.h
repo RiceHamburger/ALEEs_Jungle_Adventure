@@ -4,7 +4,7 @@
 #include "texture.h"
 #include "object.h"
 
-#define BULLET_MAX (20)
+#define BULLET_MAX (100)
 #define ENEMY_BULLET_MAX (30)
 #define BULLET_WIDTH (16)
 
@@ -17,6 +17,9 @@ protected:
 	float speedX;
 	float speedY;
 	int bulletDamage;
+
+	//移動範囲の限定
+	int* MoveRank;
 public:
 	Bullet();
 	~Bullet();
@@ -29,6 +32,11 @@ public:
 	void SetDamage(int hit);
 	int GetDamage();
 	//float GetSpeed();
+
+	//範囲セット
+	void SetWalkRang(int* rang);
+	//範囲チェック
+	bool RangCheck(float x, float y);
 };
 
 #endif //BULLET_H_

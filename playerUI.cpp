@@ -1,13 +1,14 @@
-#include <d3d9.h>
-#include "direct3d_setup.h"
+//==================================================
+//  player UI‚ÌƒNƒ‰ƒX [PlayerUI.cpp]        Autor:ƒ
+//==================================================
+
 #include "texture.h"
-#include "playerUI.h"
+#include "PlayerUI.h"
 
-static LPD3DXSPRITE sprite;
-static D3DXVECTOR3 Position;
-static LPDIRECT3DDEVICE9 g_pD3DDevice;
+LPD3DXSPRITE PlayerUI::sprite;
+D3DXVECTOR3 PlayerUI::Position;
 
-void playerUI_Draw(float x, float y) {
+void PlayerUI::playerUI_Draw(float x, float y) {
 
 	Position.x = x;
 	Position.y = y;
@@ -20,11 +21,10 @@ void playerUI_Draw(float x, float y) {
 	sprite->End();
 }
 
-void playerUI_Init() {
-	g_pD3DDevice = MyDirect3D_GetDevice();
-	D3DXCreateSprite(g_pD3DDevice, &sprite);
+void PlayerUI::playerUI_Init() {
+	D3DXCreateSprite(g_d3dDevice, &sprite);
 }
 
-void playerUI_Uninit() {
+void PlayerUI::playerUI_Uninit() {
 	sprite->Release();
 }

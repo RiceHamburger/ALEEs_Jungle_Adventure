@@ -1,6 +1,6 @@
 #include "texture.h"
 #include "water_stain.h"
-#include "direct3d_setup.h"
+#include "D3Dsetup.h"
 
 WaterStain::WaterStain()
 {
@@ -53,8 +53,7 @@ void WaterStain::DrawSprite() {
 }
 
 void WaterStain::InitSprite() {
-	LPDIRECT3DDEVICE9 g_pD3DDevice = MyDirect3D_GetDevice();
-	D3DXCreateSprite(g_pD3DDevice, &sprite);
+	D3DXCreateSprite(g_d3dDevice, &sprite);
 }
 
 void WaterStain::Sprite_Uninit() {

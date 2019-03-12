@@ -1,15 +1,15 @@
-#include "enemy.h"
+#include "enemy_red.h"
 #include "D3Dsetup.h"
-#include "BulletManager.h"
+#include "bulletManager.h"
 
-Enemy::Enemy() {
-
-}
-Enemy::~Enemy() {
+EnemyRed::EnemyRed() {
 
 }
+EnemyRed::~EnemyRed() {
 
-void Enemy::InitEnemy(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, int tex_pic_numY) {
+}
+
+void EnemyRed::InitEnemy(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, int tex_pic_numY) {
 	Circle objCollision;
 	SetPosition(pos);
 	SetTextureIndex(tex_name);
@@ -40,40 +40,26 @@ void Enemy::InitEnemy(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, int
 	text_rec.bottom = text_rec.top + GetHeight();
 
 	health_percent = 1.0f;
-	reSpawnTime = ENEMY_RETIME;
 
 	//attack time
 	attackTime = ENEMY_ATTACK_TIME;
 	Effect = false;
 	Effect_time = ENEMY_EFFECT_TIME;
+
+	//–Ú‚Ì”ÍˆÍ
+	objCollision.cx = pos.x + GetHeight() / 2;
+	objCollision.cy = pos.y + GetHeight() / 2;
+	objCollision.r = GetHeight()*10.0f;
+	g_CircleSeeCollision = objCollision;
+	thisAngle = 90;
 }
 
-void Enemy::SetTargetArr(Vector2D MtargetArr) {
-	targetArr[targetIndex].x = MtargetArr.x;
-	targetArr[targetIndex].y = MtargetArr.y;
-	targetIndex++;
-}
-
-void Enemy::SetTargetIndex(int index) {
+void EnemyRed::SetTargetIndex(int index) {
 	targetIndex = index;
 }
 
-void Enemy::EnemyActive() {
+void EnemyRed::EnemyActive() {
 	Vector2D position = GetPosition();
-
-	if ((targetArr[targetIndex].x - position.x)*(targetArr[targetIndex].x - position.x) + (targetArr[targetIndex].y - position.y)*(targetArr[targetIndex].y - position.y) <= 10) {
-		targetIndex++;
-		if (targetIndex >= ENEMY_TARGET) {
-			targetIndex = 0;
-		}
-	}
-
-	float radian = getRadian(position.x, position.y, targetArr[targetIndex].x, targetArr[targetIndex].y);
-
-	SetMoveX(cosf(radian) * speed);
-	SetMoveY(sinf(radian) * speed);
-
-	Update();
 
 	SetCircleCollisionX(position.x + GetHeight() / 2);
 	SetCircleCollisionY(position.y + GetHeight() / 2);
@@ -114,48 +100,42 @@ void Enemy::EnemyActive() {
 	}
 }
 
-void Enemy::EnemyDestroy() {
+void EnemyRed::EnemyDestroy() {
 	SetLiveFlag(false);
 }
 
-void Enemy::SetLife(int Life) {
+void EnemyRed::SetLife(int Life) {
 	life = Life;
 	if (life <= 0) {
 		life = 0;
 	}
 }
 
-void Enemy::SetScore(int Score) {
+void EnemyRed::SetScore(int Score) {
 	score = Score;
 }
 
-void Enemy::SetSpeed(float Speed) {
-	speed = Speed * 0.2f;
+void EnemyRed::SetSpeed(float Speed) {
+	speed = Speed;
 }
 
-float Enemy::GetSpeed() {
+float EnemyRed::GetSpeed() {
 	return speed;
 }
 
-int Enemy::GetScore() {
+int EnemyRed::GetScore() {
 	return score;
 }
 
-RECT* Enemy::GetRect() {
+RECT* EnemyRed::GetRect() {
 	return &text_rec;
 }
 
-int Enemy::GetLife() {
+int EnemyRed::GetLife() {
 	return life;
 }
 
-void Enemy::DeletTargetArr() {
-	for (int i = 0;i < ENEMY_TARGET;i++) {
-		targetArr[i] = { 0 };
-	}
-}
-
-float Enemy::getRadian(float X1, float Y1, float X2, float Y2) {
+float EnemyRed::getRadian(float X1, float Y1, float X2, float Y2) {
 	float w = X2 - X1; // cosƒÆ
 	float h = Y2 - Y1; // sinƒÆ
 
@@ -163,19 +143,19 @@ float Enemy::getRadian(float X1, float Y1, float X2, float Y2) {
 	return atan2f(h, w);
 }
 
-int Enemy::GetEnemyBodyDamage() {
+int EnemyRed::GetEnemyBodyDamage() {
 	return bodydamage;
 }
 
-void Enemy::InitBloodSprite() {
+void EnemyRed::InitBloodSprite() {
 	D3DXCreateSprite(g_d3dDevice, &health_sprite);
 }
 
-void Enemy::BloodSprite_Uninit() {
+void EnemyRed::BloodSprite_Uninit() {
 	health_sprite->Release();
 }
 
-void Enemy::DrawBloodSprite() {
+void EnemyRed::DrawBloodSprite() {
 	Vector2D Myposition = GetPosition();
 
 	D3DXVECTOR3 Position;
@@ -197,29 +177,32 @@ void Enemy::DrawBloodSprite() {
 	health_sprite->End();
 }
 
-void Enemy::EnemyRespawn() {
-	reSpawnTime--;
-	if (reSpawnTime <= 0) {
-		life = ENEMY_HEALTHBAR_TOTAL;
-		health_percent = 1.0f;
-		SetLiveFlag(true);
-		reSpawnTime = ENEMY_RETIME;
-		attackTime = ENEMY_ATTACK_TIME;
-		Effect = false;
-		Effect_time = ENEMY_EFFECT_TIME;
-		SetSpriteColor(D3DCOLOR_ARGB(255, 255, 255, 255));
-	}
-}
-
-void Enemy::EnemyAttack() {
+void EnemyRed::EnemyAttack() {
 	attackTime--;
 	if (attackTime <= 0) {
-		BulletManager::EnemyBullet_Create(GetPosition().x + GetWidth() / 2 - BULLET_WIDTH/2, GetPosition().y + GetHeight() / 2);
+		BulletManager::EnemyRedBullet_Create(GetPosition().x + GetWidth() / 2 - BULLET_WIDTH/2, GetPosition().y + GetHeight() / 2, thisAngle);
 		attackTime = ENEMY_ATTACK_TIME;
+
+
+		thisAngle+=25;
+		if (thisAngle >= 360) {
+			thisAngle = 90;
+		}
 	}
+	
 }
 
-void Enemy::SetDamageEffect(bool sw) {
+void EnemyRed::SetDamageEffect(bool sw) {
 	Effect = sw;
 	Effect_time = ENEMY_EFFECT_TIME;
+}
+
+
+//red
+Circle* EnemyRed::GetSeeCircleCollision() {
+	return &g_CircleSeeCollision;
+}
+
+void EnemyRed::AngleReset(void) {
+	thisAngle = 90;
 }

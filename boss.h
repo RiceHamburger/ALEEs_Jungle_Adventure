@@ -6,9 +6,9 @@
 #define BOSS_WIDTH (228)
 #define BOSS_HEIGHT (449)
 #define BOSS_SCORE (2)
-#define BOSS_SPEED_MAX (8)
-#define BOSS_SPEED_MIN (2)
-#define BOSS_ANIMATION_TIME (6)
+#define BOSS_SPEED_MAX (1.0f)
+#define BOSS_SPEED_MIN (0.4f)
+#define BOSS_ANIMATION_TIME (60)
 
 #define BOSS_BODYDAMAGE (30)
 
@@ -21,12 +21,12 @@
 #define BOSS_HEALTHBARUI_Y (690)
 
 //attack time
-#define BOSS_ATTACK_TIME (60)
-#define BOSS_BIGATTACK_TIME_MAX (120)
-#define BOSS_BIGATTACK_TIME_MIN (30)
+#define BOSS_ATTACK_TIME (600)
+#define BOSS_BIGATTACK_TIME_MAX (1200)
+#define BOSS_BIGATTACK_TIME_MIN (300)
 
 //effect time
-#define BOSS_EFFECT_TIME (20)
+#define BOSS_EFFECT_TIME (100)
 
 //y-
 #define BOSS_Y (145)
@@ -80,8 +80,6 @@ private:
 	int activeCount;
 
 public:
-	Boss();
-	~Boss();
 	void Init(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, int tex_pic_numY);
 	void Active();
 	void SetLife(int Life);

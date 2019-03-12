@@ -1,3 +1,7 @@
+//==================================================
+//  テクスチャload [texture.h]        Autor:ロ
+//==================================================
+
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
@@ -27,7 +31,9 @@ typedef enum {
 	BOSS_UI,
 	BOSS_BIG_BULLET,
 	NUMBER_END,
-	TONIC
+	TONIC,
+	TONICGUN,
+	ENEMY_RED
 }TEXTURE_NAME;
 
 int Texture_Load(void);

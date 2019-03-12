@@ -1,13 +1,13 @@
-#include "input.h"
+#include "D3DInput.h"
 #include "player.h"
-#include "bullet_Manager.h"
+#include "bulletManager.h"
 #include "background.h"
-#include "Effect.h"
-#include "judgment.h"
+#include "Judgment.h"
 #include "sound.h"
+#include "D3Dsetup.h"
 
-#define PLAYER_MOVE_SPEED (0.8f)
-#define BULLET_SPEED (10.0f)
+#define PLAYER_MOVE_SPEED (0.1f)
+#define BULLET_SPEED (1.0f)
 
 Player::Player()
 {
@@ -26,7 +26,7 @@ void Player::PlayerControl()
 	D3DXVECTOR2 vecDir(0.0f, 0.0f);
 
 	//上に移動する
-	if (Keyboard_IsPress(DIK_W) || Keyboard_IsPress(DIK_UP) || Xinput_IsTrigger(XINPUT_GAMEPAD_DPAD_UP)) {
+	if (gDInput->keyDown(DIK_W)) {
 
 		if (RangCheck(GetPosition().x, GetPosition().y - 1)) {
 			vecDir.y += -1.0f;
@@ -36,7 +36,7 @@ void Player::PlayerControl()
 			state = PlayerState_Front;
 		}
 
-	}else if(Keyboard_IsPress(DIK_S) || Keyboard_IsPress(DIK_DOWN) || Xinput_IsTrigger(XINPUT_GAMEPAD_DPAD_DOWN)) {//下に移動する
+	}else if(gDInput->keyDown(DIK_S)) {//下に移動する
 
 		if (RangCheck(GetPosition().x, GetPosition().y + 64 + 1)) {
 			vecDir.y += 1.0f;
@@ -49,7 +49,7 @@ void Player::PlayerControl()
 	}
 
 	//左に移動する
-	if (Keyboard_IsPress(DIK_A) || Keyboard_IsPress(DIK_LEFT) || Xinput_IsTrigger(XINPUT_GAMEPAD_DPAD_LEFT)) {
+	if (gDInput->keyDown(DIK_A)) {
 
 		if (RangCheck(GetPosition().x - 1, GetPosition().y)) {
 			vecDir.x += -1.0f;
@@ -59,7 +59,7 @@ void Player::PlayerControl()
 			state = PlayerState_Left;
 		}
 
-	}else if (Keyboard_IsPress(DIK_D) || Keyboard_IsPress(DIK_RIGHT) || Xinput_IsTrigger(XINPUT_GAMEPAD_DPAD_RIGHT)) {//右に移動する
+	}else if (gDInput->keyDown(DIK_D)) {//右に移動する
 
 		if (RangCheck(GetPosition().x + 64 + 1, GetPosition().y)) {
 			vecDir.x += 1.0f;
@@ -89,34 +89,38 @@ void Player::PlayerControl()
 	SetCircleCollisionX(GetPosition().x + GetWidth() / 2);
 	SetCircleCollisionY(GetPosition().y + GetWidth() / 2);
 
-	//block collision
-	//Judgment_Player_vs_Tree(vecDir);
-
 	//プレイヤーの座標が確定
-	if (Keyboard_IsTrigger(DIK_SPACE) || Xinput_IsTrigger(XINPUT_GAMEPAD_B)) {
+	if (gDInput->keyIsTrigger(DIK_SPACE)) {
+
+		if (ShootedNum >= 3 && !canHighShoot)return;
 		//player shoot
 		PlaySound(SOUND_LABEL_SE_SHOT);
+
+		//連続ShootのINIT
+		renzokuShoot = true;
+		canShootTime = SHOOTE_TIME;
 
 		switch (state)
 		{
 		case PlayerState_Front:
-			Bullet_Create(GetPosition().x + GetWidth() / 2, GetPosition().y,0, -BULLET_SPEED);
+			BulletManager::Bullet_Create(GetPosition().x + GetWidth() / 2, GetPosition().y,0, -BULLET_SPEED);
 			break;
 		case PlayerState_Left:
-			Bullet_Create(GetPosition().x, GetPosition().y + GetHeight() / 2, -BULLET_SPEED, 0);
+			BulletManager::Bullet_Create(GetPosition().x, GetPosition().y + GetHeight() / 2, -BULLET_SPEED, 0);
 			break;
 		case PlayerState_Back:
-			Bullet_Create(GetPosition().x + GetWidth() / 2, GetPosition().y + GetHeight(), 0, BULLET_SPEED);
+			BulletManager::Bullet_Create(GetPosition().x + GetWidth() / 2, GetPosition().y + GetHeight(), 0, BULLET_SPEED);
 			break;
 		case PlayerState_Right:
-			Bullet_Create(GetPosition().x + GetWidth(), GetPosition().y + GetHeight() / 2, BULLET_SPEED, 0);
+			BulletManager::Bullet_Create(GetPosition().x + GetWidth(), GetPosition().y + GetHeight() / 2, BULLET_SPEED, 0);
 			break;
 		default:
 			break;
 		}
-	}
 
-	Effect_Creat(GetPosition().x + GetWidth()/2, GetPosition().y + GetHeight() / 2, 32.0f, 60, D3DCOLOR_RGBA(32, 200, 32, 255));
+		//shootedNum add
+		ShootedNum++;
+	}
 
 	if (isMove && vecDir.x == 0 && vecDir.y == 0) {
 		isMove = false;
@@ -143,6 +147,19 @@ void Player::PlayerControl()
 			SetSpriteColor(D3DCOLOR_ARGB(255, 255, 255, 255));
 		}
 	}
+
+	//Itemを使う
+	if (gDInput->keyDown(DIK_Z)) {
+		if (haveItem) {
+			SetHighShoot(true);
+			haveItem = false;
+		}
+	}
+
+	//連続Shoot出来る
+	checkContinuous();
+	//連続SHOOT時間
+	checkHightShoot();
 }
 
 void Player::PlayerAni() {
@@ -201,6 +218,18 @@ void Player::InitPlayer(Vector2D pos,PlayerState State, D3DXVECTOR2 PlayerSpeed,
 	//無敵
 	invincible = false;
 	invincible_time = PLAYER_INVINCIBLE_TIME;
+
+	//連続Shoot
+	renzokuShoot = false;
+
+	//can't high shoot
+	canHighShoot = false;
+
+	//弾の数量初期化
+	ShootedNum = 0;
+
+	//have Item
+	haveItem = false;
 }
 
 void Player::SetLife(int Life) {
@@ -247,5 +276,40 @@ bool Player::RangCheck(float x, float y) {
 	int gx = x / 32;
 	int gy = y / 32;
 	return *(WalkRank + gy*MAP_NUM_X + gx) == 0;
-	//return CanWalkRange[gy][gx] == 0;
+}
+
+void Player::checkContinuous(void) {
+	if (renzokuShoot) {
+		canShootTime--;
+		if (canShootTime <= 0) {
+			renzokuShoot = false;
+			canShootTime = SHOOTE_TIME;
+			ShootedNum = 0;
+		}
+	}
+}
+
+void Player::SetHighShoot(bool sw) {
+	canHighShoot = sw;
+	if (canHighShoot) {
+		HighShootTime = HIGHT_SHOOTE_TIME;
+	}
+}
+
+void Player::checkHightShoot(void) {
+	if (canHighShoot) {
+		HighShootTime--;
+		if (HighShootTime <= 0) {
+			canHighShoot = false;
+			ShootedNum = 0;
+		}
+	}
+}
+
+bool Player::GetItemCheck(void) {
+	return haveItem;
+}
+
+void Player::SetItemCheck(bool sw) {
+	haveItem = sw;
 }

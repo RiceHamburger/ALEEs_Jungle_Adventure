@@ -5,7 +5,7 @@
 
 #define EXPLOSION_MAX (6)
 #define EXPLOSION_WIDTH (128)
-#define EXPLOSION_ANIMATION_TIME (4)
+#define EXPLOSION_ANIMATION_TIME (30)
 #define EXPLOSION_PIC_NUM (4)
 
 class Explosion :public Object {

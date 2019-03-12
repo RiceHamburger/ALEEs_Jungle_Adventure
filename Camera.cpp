@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "direct3d_setup.h"
+//#include "D3Dsetup.h"
 
 Camera::Camera(int width, int height, float angle, DirectX::XMFLOAT3 scaleFactors)
 {
@@ -59,10 +59,9 @@ bool Camera::IsFollowing() const
 
 void Camera::SetTransform()
 {
-	LPDIRECT3DDEVICE9 g_pD3DDevice = MyDirect3D_GetDevice();
-	g_pD3DDevice->SetTransform(D3DTS_PROJECTION, &orthographicMatrix);
-	g_pD3DDevice->SetTransform(D3DTS_WORLD, &identityMatrix);
-	g_pD3DDevice->SetTransform(D3DTS_VIEW, &viewMatrix);
+	g_d3dDevice->SetTransform(D3DTS_PROJECTION, &orthographicMatrix);
+	g_d3dDevice->SetTransform(D3DTS_WORLD, &identityMatrix);
+	g_d3dDevice->SetTransform(D3DTS_VIEW, &viewMatrix);
 }
 
 int Camera::GetcameraLX() {

@@ -4,13 +4,15 @@
 #include "texture.h"
 #include "object.h"
 
-#define PLAYER_ANIMATION_TIME (4)
+#define PLAYER_ANIMATION_TIME (40)
 #define PLAYER_INVINCIBLE_TIME (20)
-/*#define MAP_NUM_X (42)
-#define MAP_NUM_Y (16)*/
 
 #define MAP_NUM_X (84)
 #define MAP_NUM_Y (32)
+
+//時間
+#define SHOOTE_TIME (30)
+#define HIGHT_SHOOTE_TIME (600)
 
 typedef enum
 {
@@ -42,7 +44,21 @@ private:
 	bool invincible;
 	int invincible_time;
 
+	//移動出来る範囲
 	int* WalkRank;
+	//弾を留める時間
+	int canShootTime;
+	//出した弾の数量
+	int ShootedNum;
+	//連続できない時の時間用switch
+	bool renzokuShoot;
+	//連続出来るかどうか
+	bool canHighShoot;
+	//連続SHOOT時間
+	int HighShootTime;
+	//プレイヤーがITEMを持っている時
+	bool haveItem;
+
 public:
 	Player();
 	~Player();
@@ -63,6 +79,17 @@ public:
 
 	void SetWalkRang(int* rang);
 	bool RangCheck(float x,float y);
+
+	//3回のShoot計算
+	void checkContinuous(void);
+
+	//連続Shoot出来る
+	void SetHighShoot(bool sw);
+	//連続Shoot計算
+	void checkHightShoot(void);
+
+	bool GetItemCheck(void);
+	void SetItemCheck(bool sw);
 };
 
 

@@ -1,13 +1,6 @@
 #include "boss.h"
-#include "direct3d_setup.h"
-#include "bullet_Manager.h"
-
-Boss::Boss() {
-
-}
-Boss::~Boss() {
-
-}
+#include "D3Dsetup.h"
+#include "bulletManager.h"
 
 void Boss::Init(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, int tex_pic_numY) {
 	Circle objCollision;
@@ -175,13 +168,15 @@ RECT* Boss::GetRect() {
 }
 
 void Boss::InitBloodSprite() {
-	LPDIRECT3DDEVICE9 g_pD3DDevice = MyDirect3D_GetDevice();
-	D3DXCreateSprite(g_pD3DDevice, &health_sprite);
-	D3DXCreateSprite(g_pD3DDevice, &healthUI_sprite);
+	D3DXCreateSprite(g_d3dDevice, &health_sprite);
+	D3DXCreateSprite(g_d3dDevice, &healthUI_sprite);
 }
 
 void Boss::BloodSprite_Uninit() {
-	health_sprite->Release();
+	//if (health_sprite) {
+		health_sprite->Release();
+	//}
+	
 	healthUI_sprite->Release();
 }
 
@@ -265,14 +260,14 @@ void Boss::SetTargetIndex(int index) {
 void Boss::Attack() {
 	attackTime--;
 	if (attackTime <= 0) {
-		BossBullet_Create(GetCircleCollision()->cx, GetCircleCollision()->cy);
+		BulletManager::BossBullet_Create(GetCircleCollision()->cx, GetCircleCollision()->cy);
 		attackTime = BOSS_ATTACK_TIME;
 	}
 
 	//big bullet
 	BigattackTime--;
 	if (BigattackTime <= 0) {
-		BossBigBullet_Create(GetCircleCollision()->cx, GetCircleCollision()->cy);
+		BulletManager::BossBigBullet_Create(GetCircleCollision()->cx, GetCircleCollision()->cy);
 
 		if (life > 10) {
 			BigattackTime = BOSS_BIGATTACK_TIME_MAX;

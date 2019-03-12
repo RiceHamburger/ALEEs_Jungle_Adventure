@@ -1,26 +1,40 @@
+//==================================================
+//  裁きのクラス [Judgment.h]        Autor:ロ
+//==================================================
 #ifndef JUDGEMENT_H_
 #define JUDGEMENT_H_
 
 #include "common.h"
-#include "direct3d_setup.h"
+#include "D3Dsetup.h"
 
-bool Collision_HitCircle(const Circle* circle_a, const Circle* circle_b);
-//ポインタのコピー、四bit以上
+class Judgment
+{
+public:
+	static bool Collision_HitCircle(const Circle* circle_a, const Circle* circle_b);
+	//ポインタのコピー、四bit以上
 
-void Judgment_Bullet_vs_Enemy(void);
-void Judgment_Bullet_vs_Player(void);
-bool Judgment_Player_vs_Tree(D3DXVECTOR2 vec);
-void Judgment_Player_vs_Enemy(void);
+	static void Judgment_Bullet_vs_Enemy(void);
 
-//item
-void Judgment_Tonic_vs_Player(void);
+	//red
+	static void Judgment_Bullet_vs_EnemyRed(void);
+	static void Judgment_Player_vs_EnemyRed(void);
+	static void Judgment_Player_vs_EnemyRedRange(void);
 
-//boss
-void Judgment_Bullet_vs_Boss(void);
-void Judgment_Player_vs_Boss(void);
-void Judgment_BigBullet_vs_Player(void);
+	static void Judgment_Bullet_vs_Player(void);
+	static void Judgment_Player_vs_Enemy(void);
 
-//final collision area
-void StartShowBoss(void);
+	//item
+	static void Judgment_Tonic_vs_Player(void);
+
+	//boss
+	static void Judgment_Bullet_vs_Boss(void);
+	static void Judgment_Player_vs_Boss(void);
+	static void Judgment_BigBullet_vs_Player(void);
+
+	//final collision area
+	static void StartShowBoss(void);
+private:
+	static RECT endArea;
+};
 
 #endif //JUDGEMENT_H_

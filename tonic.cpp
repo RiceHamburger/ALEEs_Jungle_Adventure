@@ -8,7 +8,7 @@ Tonic::~Tonic() {
 
 }
 
-void Tonic::InitTonic(Vector2D pos, TEXTURE_NAME tex_name) {
+void Tonic::InitTonic(Vector2D pos, TEXTURE_NAME tex_name,TonicState state) {
 	Circle objCollision;
 	SetPosition(pos);
 	SetTextureIndex(tex_name);
@@ -22,6 +22,7 @@ void Tonic::InitTonic(Vector2D pos, TEXTURE_NAME tex_name) {
 	SetCircleCollision(objCollision);
 
 	addHealth = TONIC_ADD_HEALTH;
+	this_TonicState = state;
 }
 
 void Tonic::TonicActive() {
@@ -40,4 +41,8 @@ void Tonic::resetCollision() {
 	Vector2D position = GetPosition();
 	SetCircleCollisionX(position.x + GetWidth() / 2);
 	SetCircleCollisionY(position.y + GetWidth() / 2);
+}
+
+int Tonic::GetState() {
+	return this_TonicState;
 }

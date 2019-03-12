@@ -1,16 +1,19 @@
+//==================================================
+//  裁きのクラス [Judgment.cpp]        Autor:ロ
+//==================================================
 #include <stdlib.h>
 #include "judgment.h"
-#include "bullet_Manager.h"
-#include "enemy_Manager.h"
-#include "explosion_Manager.h"
-#include "Level1_Manager.h"
-#include "tree_Manager.h"
+#include "bulletManager.h"
+#include "EnemyManager.h"
+#include "ExplosionManager.h"
+#include "GameScene.h"
+//#include "tree_Manager.h"
 #include "sound.h"
-#include "tonic_Manager.h"
+#include "TonicManager.h"
 
-static RECT endArea = { 2283,449,2424,510 };
+RECT Judgment::endArea = { 2283,449,2424,510 };
 
-bool Collision_HitCircle(const Circle* p_Circle_a, const Circle* p_Circle_b) {
+bool Judgment::Collision_HitCircle(const Circle* p_Circle_a, const Circle* p_Circle_b) {
 	float L_dis = p_Circle_a->r + p_Circle_b->r;
 
 	float C_c = (p_Circle_a->cx - p_Circle_b->cx) * (p_Circle_a->cx - p_Circle_b->cx) + (p_Circle_a->cy - p_Circle_b->cy) * (p_Circle_a->cy - p_Circle_b->cy);
@@ -18,15 +21,15 @@ bool Collision_HitCircle(const Circle* p_Circle_a, const Circle* p_Circle_b) {
 	return C_c < L_dis * L_dis;
 }
 
-void Judgment_Bullet_vs_Enemy(void) {
+void Judgment::Judgment_Bullet_vs_Enemy(void) {
 	//弾とエネミーは有効か？
-	if (!Enemy_IsEnable() || !Bullet_IsEnable()) {
+	if (!EnemyManager::Enemy_IsEnable() || !BulletManager::Bullet_IsEnable()) {
 		return;
 	}
 
-	Bullet *Bullets = BulletMgrGetBullet();
-	Enemy *Enemys = EnemyMgrGetEnemy();
-	Player *p_Player = GetPlayer();
+	Bullet *Bullets = BulletManager::BulletMgrGetBullet();
+	Enemy *Enemys = EnemyManager::EnemyMgrGetEnemy();
+	Player *p_Player = GameScene::GetPlayer();
 	//弾のコリジョンとエネミーのコリジョン
 	for (int i = 0;i < BULLET_MAX;i++) {
 		if (Bullets[i].GetLiveFlag()) {
@@ -49,14 +52,14 @@ void Judgment_Bullet_vs_Enemy(void) {
 							//enemy destroy
 							PlaySound(SOUND_LABEL_SE_EXPLOSION);
 							Enemys[j].EnemyDestroy();
-							Explosion_Create(Enemys[j].GetPosition().x - Enemys[j].GetWidth() / 2, Enemys[j].GetPosition().y - Enemys[j].GetHeight() / 2);
+							ExplosionManager::Explosion_Create(Enemys[j].GetPosition().x - Enemys[j].GetWidth() / 2, Enemys[j].GetPosition().y - Enemys[j].GetHeight() / 2);
 							
 							//乱数でアイテムを出す
 							int min = 1;
 							int max = 10;
 							int seed = rand() % (max - min + 1) + min;
 							if (seed <= 5) {
-								Tonic_Create(Enemys[j].GetPosition().x + Enemys[j].GetWidth() / 2, Enemys[j].GetPosition().y + Enemys[j].GetHeight() / 2);
+								TonicManager::Tonic_Create(Enemys[j].GetPosition().x + Enemys[j].GetWidth() / 2, Enemys[j].GetPosition().y + Enemys[j].GetHeight() / 2);
 							}
 
 							p_Player->AddScore(Enemys[j].GetScore() * 20);
@@ -70,14 +73,14 @@ void Judgment_Bullet_vs_Enemy(void) {
 
 }
 
-void Judgment_Bullet_vs_Player(void) {
-	Player *p_Player = GetPlayer();
+void Judgment::Judgment_Bullet_vs_Player(void) {
+	Player *p_Player = GameScene::GetPlayer();
 
-	if (!EnemyBullet_IsEnable() || p_Player->GetInvincible()) {
+	if (!BulletManager::EnemyBullet_IsEnable() || p_Player->GetInvincible()) {
 		return;
 	}
 
-	EnemyBullet *Bullets = BulletMgrGetEnemyBullet();
+	EnemyBullet *Bullets = BulletManager::BulletMgrGetEnemyBullet();
 	
 
 	for (int i = 0;i < ENEMY_BULLET_MAX;i++) {
@@ -95,20 +98,20 @@ void Judgment_Bullet_vs_Player(void) {
 				}
 				else {
 					PlaySound(SOUND_LABEL_SE_PLAYERDIE);
-					LevelClear();
+					GameScene::LevelClear();
 				}
 			}
 		}
 	}
 }
 
-void Judgment_Player_vs_Enemy(void) {
-	Player *p_Player = GetPlayer();
-	if (!Enemy_IsEnable() || p_Player->GetInvincible()) {
+void Judgment::Judgment_Player_vs_Enemy(void) {
+	Player *p_Player = GameScene::GetPlayer();
+	if (!EnemyManager::Enemy_IsEnable() || p_Player->GetInvincible()) {
 		return;
 	}
 
-	Enemy *Enemys = EnemyMgrGetEnemy();
+	Enemy *Enemys = EnemyManager::EnemyMgrGetEnemy();
 	for (int j = 0;j < ENEMY_MAX;j++) {
 		if (Enemys[j].GetLiveFlag()) {
 
@@ -142,73 +145,15 @@ void Judgment_Player_vs_Enemy(void) {
 				else {
 					PlaySound(SOUND_LABEL_SE_PLAYERDIE);
 
-					LevelClear();
+					GameScene::LevelClear();
 				}
 			}
 		}
 	}
 }
 
-int Collision(RECT rect1, RECT rect2)
-{
-	RECT dest;
-	return IntersectRect(&dest, &rect1, &rect2);
-}
-
-bool Judgment_Player_vs_Tree(D3DXVECTOR2 vec) {
-
-	D3DXVECTOR2 vecS = vec;
-
-	Player *p_Player = GetPlayer();
-	RECT *Trees_Collsion = GetTree();
-	RECT player_rect;
-	player_rect.left = p_Player->GetPosition().x;
-	player_rect.top = p_Player->GetPosition().y;
-	player_rect.right = player_rect.left + p_Player->GetWidth();
-	player_rect.bottom = player_rect.top + p_Player->GetHeight();
-
-
-	RECT dest;
-	for (int i = 0;i < TREE_COLLSION_MAX;i++) {
-		if (IntersectRect(&dest,&player_rect, &Trees_Collsion[i])) {
-
-			//left
-			if (dest.right == player_rect.right) {
-				if (player_rect.right > Trees_Collsion[i].left) {
-					p_Player->SetPositionX(Trees_Collsion[i].left - p_Player->GetWidth());
-				}
-			}
-
-			//right
-			if (dest.left == player_rect.left) {
-				if (player_rect.left < Trees_Collsion[i].right) {
-					p_Player->SetPositionX(Trees_Collsion[i].right);
-				}
-			}
-
-			//top
-			if (dest.bottom == player_rect.bottom) {
-				if (player_rect.bottom > Trees_Collsion[i].top) {
-					p_Player->SetPositionY(Trees_Collsion[i].top - p_Player->GetHeight());
-				}
-			}
-
-			
-			//bottom
-			if (dest.top == player_rect.top) {
-				if (player_rect.top < Trees_Collsion[i].bottom) {
-					p_Player->SetPositionY(Trees_Collsion[i].bottom);
-				}
-			}
-			break;
-			//return true;
-		}
-	}
-	return false;
-}
-
-void StartShowBoss(void) {
-	Player *p_Player = GetPlayer();
+void Judgment::StartShowBoss(void) {
+	Player *p_Player = GameScene::GetPlayer();
 
 	RECT player_rect;
 	player_rect.left = p_Player->GetPosition().x;
@@ -218,18 +163,18 @@ void StartShowBoss(void) {
 
 	RECT area;
 	if (IntersectRect(&area, &player_rect, &endArea)) {
-		CameraCancelFollow();
+		GameScene::CameraCancelFollow();
 	}
 }
 
-void Judgment_Bullet_vs_Boss(void) {
-	Boss *p_boss = GetBoss();
-	if (!p_boss->GetActiveflag() || !Bullet_IsEnable()) {
+void Judgment::Judgment_Bullet_vs_Boss(void) {
+	Boss *p_boss = GameScene::GetBoss();
+	if (!p_boss->GetActiveflag() || !BulletManager::Bullet_IsEnable()) {
 		return;
 	}
 
-	Bullet *Bullets = BulletMgrGetBullet();
-	Player *p_Player = GetPlayer();
+	Bullet *Bullets = BulletManager::BulletMgrGetBullet();
+	Player *p_Player = GameScene::GetPlayer();
 	//弾のコリジョンとエネミーのコリジョン
 	for (int i = 0;i < BULLET_MAX;i++) {
 		if (Bullets[i].GetLiveFlag()) {
@@ -251,7 +196,7 @@ void Judgment_Bullet_vs_Boss(void) {
 					PlaySound(SOUND_LABEL_SE_BOSSDIE);
 					p_boss->SetSpriteColor(D3DCOLOR_ARGB(255, 255, 255, 127));
 					p_Player->AddScore(p_boss->GetScore() * 100);
-					LevelClear();
+					GameScene::LevelClear();
 					
 				}
 
@@ -260,9 +205,9 @@ void Judgment_Bullet_vs_Boss(void) {
 	}
 }
 
-void Judgment_Player_vs_Boss(void) {
-	Player *p_Player = GetPlayer();
-	Boss *p_boss = GetBoss();
+void Judgment::Judgment_Player_vs_Boss(void) {
+	Player *p_Player = GameScene::GetPlayer();
+	Boss *p_boss = GameScene::GetBoss();
 	if (!p_boss->GetActiveflag() || p_Player->GetInvincible()) {
 		return;
 	}
@@ -297,20 +242,20 @@ void Judgment_Player_vs_Boss(void) {
 		else {
 			PlaySound(SOUND_LABEL_SE_PLAYERDIE);
 
-			LevelClear();
+			GameScene::LevelClear();
 		}
 	}
 }
 
 //boss big bullet
-void Judgment_BigBullet_vs_Player(void) {
-	Boss *p_boss = GetBoss();
-	Player *p_Player = GetPlayer();
-	if (!p_boss->GetActiveflag() || !BossBigBullet_IsEnable() || p_Player->GetInvincible()) {
+void Judgment::Judgment_BigBullet_vs_Player(void) {
+	Boss *p_boss = GameScene::GetBoss();
+	Player *p_Player = GameScene::GetPlayer();
+	if (!p_boss->GetActiveflag() || !BulletManager::BossBigBullet_IsEnable() || p_Player->GetInvincible()) {
 		return;
 	}
 
-	EnemyBullet *Bullets = BulletMgrGetBossBigBullet();
+	EnemyBullet *Bullets = BulletManager::BulletMgrGetBossBigBullet();
 
 
 	for (int i = 0;i < BOSS_BIGBULLET_MAX;i++) {
@@ -328,36 +273,159 @@ void Judgment_BigBullet_vs_Player(void) {
 				}
 				else {
 					PlaySound(SOUND_LABEL_SE_PLAYERDIE);
-					LevelClear();
+					GameScene::LevelClear();
 				}
 			}
 		}
 	}
 }
 
-void Judgment_Tonic_vs_Player(void) {
-	Player *p_Player = GetPlayer();
+void Judgment::Judgment_Tonic_vs_Player(void) {
+	Player *p_Player = GameScene::GetPlayer();
 
-	if (!Tonic_IsEnable() || p_Player->GetInvincible()) {
+	if (!TonicManager::Tonic_IsEnable() || p_Player->GetInvincible()) {
 		return;
 	}
 
-	Tonic *Tonics = TonicMgrGetTonic();
+	Tonic *Tonics = TonicManager::TonicMgrGetTonic();
 
 
 	for (int i = 0;i < ENEMY_BULLET_MAX;i++) {
 		if (Tonics[i].GetLiveFlag()) {
 			if (Collision_HitCircle(Tonics[i].GetCircleCollision(), p_Player->GetCircleCollision())) {
-				//当たってる
-				Tonics[i].TonicDestroy();
-				p_Player->SetLife(p_Player->GetLife() + Tonics[i].GetAddHealth());
 
 				PlaySound(SOUND_LABEL_SE_ITEM);
 
-				if (p_Player->GetLife() > 200) {
-					p_Player->SetLife(200);
+				//当たってる
+				//1.hp up
+				switch (Tonics[i].GetState())
+				{
+				case HPUP:
+					
+					p_Player->SetLife(p_Player->GetLife() + Tonics[i].GetAddHealth());
+
+					if (p_Player->GetLife() > 200) {
+						p_Player->SetLife(200);
+					}
+					break;
+				case SHOOTGUN:
+					p_Player->SetItemCheck(true);
+					break;
 				}
+				
+				Tonics[i].TonicDestroy();
 			}
 		}
 	}
+}
+
+//red enemy
+void Judgment::Judgment_Bullet_vs_EnemyRed(void) {
+	//弾とエネミーは有効か？
+	if (!EnemyManager::EnemyRed_IsEnable() || !BulletManager::Bullet_IsEnable()) {
+		return;
+	}
+
+	Bullet *Bullets = BulletManager::BulletMgrGetBullet();
+	EnemyRed *Enemys = EnemyManager::EnemyRedMgrGetEnemy();
+	Player *p_Player = GameScene::GetPlayer();
+
+	//弾のコリジョンとエネミーのコリジョン
+	for (int i = 0;i < BULLET_MAX;i++) {
+		if (Bullets[i].GetLiveFlag()) {
+				if (Enemys->GetLiveFlag()) {
+					if (Collision_HitCircle(Bullets[i].GetCircleCollision(), Enemys->GetCircleCollision())) {
+						//当たってる
+						Bullets[i].BulletDestroy();
+
+						PlaySound(SOUND_LABEL_SE_ENEMYHITED);
+
+						//enemy effect
+						Enemys->SetDamageEffect(true);
+
+						if (Enemys->GetLife() >= 2) {
+							Enemys->SetLife(Enemys->GetLife() - Bullets[i].GetDamage());
+							p_Player->AddScore(Enemys->GetScore());
+						}
+						else {
+							//enemy destroy
+							PlaySound(SOUND_LABEL_SE_EXPLOSION);
+							Enemys->EnemyDestroy();
+							ExplosionManager::Explosion_Create(Enemys->GetPosition().x - Enemys->GetWidth() / 2, Enemys->GetPosition().y - Enemys->GetHeight() / 2);
+
+							//アイテムを出す
+							TonicManager::Tonic_CreateGun(Enemys->GetPosition().x + Enemys->GetWidth() / 2, Enemys->GetPosition().y + Enemys->GetHeight() / 2);
+							
+							p_Player->AddScore(Enemys->GetScore() * 20);
+						}
+
+					}
+				}
+			
+		}
+	}
+
+}
+
+void Judgment::Judgment_Player_vs_EnemyRed(void) {
+	Player *p_Player = GameScene::GetPlayer();
+	if (!EnemyManager::EnemyRed_IsEnable() || p_Player->GetInvincible()) {
+		return;
+	}
+
+	EnemyRed *Enemys = EnemyManager::EnemyRedMgrGetEnemy();
+
+			//player hit enemy
+			if (Collision_HitCircle(p_Player->GetCircleCollision(), Enemys->GetCircleCollision())) {
+
+				//当たってる
+				if (p_Player->GetLife() > 0) {
+					p_Player->SetLife(p_Player->GetLife() - Enemys->GetEnemyBodyDamage());
+					p_Player->SetInvincible(true);
+
+					PlaySound(SOUND_LABEL_SE_PLAYERHITED);
+
+					//return
+					/*if (Enemys->GetPosition().x > p_Player->GetPosition().x) {
+						p_Player->SetMoveX(-20);
+					}
+
+					if (Enemys->GetPosition().x < p_Player->GetPosition().x) {
+						p_Player->SetMoveX(20);
+					}
+
+					if (Enemys[j].GetPosition().y > p_Player->GetPosition().y) {
+						p_Player->SetMoveY(-20);
+					}
+
+					if (Enemys[j].GetPosition().y < p_Player->GetPosition().y) {
+						p_Player->SetMoveX(20);
+					}*/
+					p_Player->SetMoveY(40);
+				}
+				else {
+					PlaySound(SOUND_LABEL_SE_PLAYERDIE);
+
+					GameScene::LevelClear();
+				}
+			}
+		
+}
+
+//範囲内
+void Judgment::Judgment_Player_vs_EnemyRedRange(void) {
+
+	EnemyRed *Enemys = EnemyManager::EnemyRedMgrGetEnemy();
+	if (!Enemys->GetLiveFlag())return;
+
+	Player *p_Player = GameScene::GetPlayer();
+	//player hit enemy
+	if (Collision_HitCircle(p_Player->GetCircleCollision(), Enemys->GetSeeCircleCollision())) {
+
+		Enemys->EnemyAttack();
+	}
+	else {
+		Enemys->AngleReset();
+	}
+
 }

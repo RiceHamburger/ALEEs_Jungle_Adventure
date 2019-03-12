@@ -3,7 +3,7 @@
 
 #include <DirectXMath.h>
 #include "player.h"
-#include "direct3d_setup.h"
+#include "D3Dsetup.h"
 
 #define CAMERA_TARGET_X (2300)
 #define CAMERA_TARGET_Y (760)

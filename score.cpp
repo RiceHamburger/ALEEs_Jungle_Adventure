@@ -1,7 +1,11 @@
-#include "number.h"
-#include "score.h"
+//==================================================
+//  スコアクラス [Score.cpp]        Autor:ロ
+//==================================================
 
-void Score_Draw(float x, float y, int score, int fig, bool bLeft, bool bZero)
+#include "Number.h"
+#include "Score.h"
+
+void Score::Score_Draw(float x, float y, int score, int fig, bool bLeft, bool bZero)
 {
 	// カンスト用の最大数値を作る
 	int count_stop_score = 1;
@@ -19,15 +23,15 @@ void Score_Draw(float x, float y, int score, int fig, bool bLeft, bool bZero)
 			int n = score % 10;
 			score /= 10;
 
-			Number_Draw(x + NUMBER_WIDTH * (fig - (i + 1)), y, n);
+			Number::Number_Draw(x + NUMBER_WIDTH * (fig - (i + 1)), y, n);
 		}
 	}
 }
 
-void Score_Init() {
-	Number_Init();
+void Score::Score_Init() {
+	Number::Number_Init();
 }
 
-void Score_Uninit() {
-	Number_Uninit();
+void Score::Score_Uninit() {
+	Number::Number_Uninit();
 }

@@ -32,21 +32,21 @@ DWORD g_aSizeAudio[SOUND_LABEL_MAX] = {};					// オーディオデータサイズ
 // 各音素材のパラメータ
 SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 {
-	{"sound/opmusic-i001.wav", -1},	// OP
-	{"sound/bgmusic-p001.wav", -1},	// BGM1
-	{"sound/3.wav", -1},			// BOSS
-	{"sound/MOOV.WAV", -1},			// END
-	{"sound/RIFLE2.WAV", 0},		// 弾発射音
-	{"sound/SMALDRIP.WAV", 0},		// エネミー弾発射音
-	{"sound/Efx06.wav", 0},			// プレーヤーヒット音
-	{"sound/se_damage.wav", 0},		// 爆発音
-	{"sound/HUGESPL.WAV", 0 },		// エネミーヒットされた
-	{"sound/bossshout.wav", 0 },	// BOSSヒットされた
-	{"sound/OHHH.WAV", 0 },			// PLAYERヒットされた
-	{"sound/JANGLE.WAV", 0 },		// GAME START
-	{"sound/MEOW.WAV", 0 },			// プレーヤーDIE
-	{"sound/DYNAMITE.WAV", 0 },		// BOSS弾発射音
-	{"sound/Effect49.wav", 0 },		// BOSS DIE
+	{ "sound/opmusic-i001.wav", -1 },	// OP
+	{ "sound/bgmusic-p001.wav", -1 },	// BGM1
+	{ "sound/3.wav", -1 },			// BOSS
+	{ "sound/MOOV.WAV", -1 },			// END
+	{ "sound/RIFLE2.WAV", 0 },		// 弾発射音
+	{ "sound/SMALDRIP.WAV", 0 },		// エネミー弾発射音
+	{ "sound/Efx06.wav", 0 },			// プレーヤーヒット音
+	{ "sound/se_damage.wav", 0 },		// 爆発音
+	{ "sound/HUGESPL.WAV", 0 },		// エネミーヒットされた
+	{ "sound/bossshout.wav", 0 },	// BOSSヒットされた
+	{ "sound/OHHH.WAV", 0 },			// PLAYERヒットされた
+	{ "sound/JANGLE.WAV", 0 },		// GAME START
+	{ "sound/MEOW.WAV", 0 },			// プレーヤーDIE
+	{ "sound/DYNAMITE.WAV", 0 },		// BOSS弾発射音
+	{ "sound/Effect49.wav", 0 },		// BOSS DIE
 	{ "sound/8.wav", 0 },			// ITEM
 };
 

@@ -1,36 +1,27 @@
+//==================================================
+//  spriteクラス [Sprite.cpp]        Autor:ロ
+//==================================================
+
 #include <d3dx9.h>
 #include "texture.h"
-#include "direct3d_setup.h"
+#include "D3Dsetup.h"
+#include "sprite.h"
 
-/*構造体宣言*/
-//creat 2D
-typedef struct
-{
-	//floatにして４つ目1.0f座標変換頂点
-	D3DXVECTOR4 position;
-	//color
-	D3DCOLOR color;
-	//texture
-	D3DXVECTOR2 texcoard;
-}Vertex2D;
+// 静的メンバ変数
+//==================================================
+D3DCOLOR Sprite::m_Color = 0xffffffff;
+LPDIRECT3DVERTEXBUFFER9 Sprite::g_pVertexBuffer = NULL;
 
-//#define FVF_VERTEX2D (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
-#define FVF_VERTEX2D (D3DFVF_XYZRHW | D3DFVF_TEX1 | D3DFVF_DIFFUSE)
+Sprite::Sprite(){}
+Sprite::~Sprite() {}
 
-/**/
-static D3DCOLOR g_Color = 0xffffffff;
-//static D3DCOLOR g_Color = D3DCOLOR_RGBA(255,255,255,255);
-
-static LPDIRECT3DVERTEXBUFFER9 g_pVertexBuffer = NULL;
-
-void Sprite_SetColor(D3DCOLOR color) {
-	g_Color = color;
+void Sprite::Sprite_SetColor(D3DCOLOR color) {
+	m_Color = color;
 }
 
 //画像インデックス、X座標、Y座標
-void Sprite_Draw(int texture_index, float dx, float dy) {
+void Sprite::Sprite_Draw(int texture_index, float dx, float dy) {
 
-	LPDIRECT3DDEVICE9 g_pD3DDevice = MyDirect3D_GetDevice();
 	float texture_width = (float)Texture_GetWidth(texture_index);
 	float texture_height = (float)Texture_GetHeight(texture_index);
 
@@ -38,12 +29,12 @@ void Sprite_Draw(int texture_index, float dx, float dy) {
 	float texture_Ty = dy - 0.5f;
 	float texture_Tw = dx + texture_width - 0.5f;
 	float texture_Th = dy + texture_height - 0.5f;
-	
+
 	Vertex2D Square[] = {
-		{ D3DXVECTOR4(texture_Tx, texture_Ty, 1.0f, 1.0f), g_Color,D3DXVECTOR2(0.0f,0.0f) },//0 0
-		{ D3DXVECTOR4(texture_Tw, texture_Ty, 1.0f, 1.0f), g_Color,D3DXVECTOR2(1.0f,0.0f) },//1 1
-		{ D3DXVECTOR4(texture_Tx, texture_Th, 1.0f, 1.0f), g_Color,D3DXVECTOR2(0.0f,1.0f) },//3 2
-		{ D3DXVECTOR4(texture_Tw, texture_Th, 1.0f, 1.0f), g_Color,D3DXVECTOR2(1.0f,1.0f) }//2 4
+		{ D3DXVECTOR4(texture_Tx, texture_Ty, 1.0f, 1.0f), m_Color,D3DXVECTOR2(0.0f,0.0f) },//0 0
+		{ D3DXVECTOR4(texture_Tw, texture_Ty, 1.0f, 1.0f), m_Color,D3DXVECTOR2(1.0f,0.0f) },//1 1
+		{ D3DXVECTOR4(texture_Tx, texture_Th, 1.0f, 1.0f), m_Color,D3DXVECTOR2(0.0f,1.0f) },//3 2
+		{ D3DXVECTOR4(texture_Tw, texture_Th, 1.0f, 1.0f), m_Color,D3DXVECTOR2(1.0f,1.0f) }//2 4
 	};
 
 
@@ -53,16 +44,16 @@ void Sprite_Draw(int texture_index, float dx, float dy) {
 		1,3,2,
 	};
 
-	g_pD3DDevice->SetFVF(FVF_VERTEX2D);
-	g_pD3DDevice->SetTexture(0, Texture_GetTexture(texture_index));
+	g_d3dDevice->SetFVF(FVF_VERTEX2D);
+	g_d3dDevice->SetTexture(0, Texture_GetTexture(texture_index));
 
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+	g_d3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	g_d3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	g_d3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
 
 	//Square
-	g_pD3DDevice->DrawIndexedPrimitiveUP(
+	g_d3dDevice->DrawIndexedPrimitiveUP(
 		D3DPT_TRIANGLELIST,
 		0,
 		4,
@@ -75,8 +66,8 @@ void Sprite_Draw(int texture_index, float dx, float dy) {
 }
 
 //画像インデックス、X座標、Y座標、テクスチャの画像X座標、テクスチャの画像Y座標、画像の横サイズ、画像の立てサイズ
-void Sprite_Draw(int texture_index, float dx, float dy, int tx, int ty, int tw, int th) {
-	LPDIRECT3DDEVICE9 g_pD3DDevice = MyDirect3D_GetDevice();
+void Sprite::Sprite_Draw(int texture_index, float dx, float dy, int tx, int ty, int tw, int th) {
+	
 	float texture_width = Texture_GetWidth(texture_index);
 	float texture_height = Texture_GetHeight(texture_index);
 
@@ -93,7 +84,7 @@ void Sprite_Draw(int texture_index, float dx, float dy, int tx, int ty, int tw, 
 	Vertex2D Square[] = {
 		{ D3DXVECTOR4(texture_Tx, texture_Ty, 1.0f, 1.0f), D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v0) },
 		{ D3DXVECTOR4(tw + texture_Tx, texture_Ty, 1.0f, 1.0f), D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v0) },
-		{ D3DXVECTOR4(texture_Tx, texture_Ty +th, 1.0f, 1.0f), D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v1) },
+		{ D3DXVECTOR4(texture_Tx, texture_Ty + th, 1.0f, 1.0f), D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v1) },
 		{ D3DXVECTOR4(tw + texture_Tx, texture_Ty + th, 1.0f, 1.0f), D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v1) }
 	};
 
@@ -105,19 +96,19 @@ void Sprite_Draw(int texture_index, float dx, float dy, int tx, int ty, int tw, 
 	memcpy(pV, Square, sizeof(Square));
 	g_pVertexBuffer->Unlock();
 
-	g_pD3DDevice->SetFVF(FVF_VERTEX2D);
-	g_pD3DDevice->SetTexture(0, Texture_GetTexture(texture_index));
+	g_d3dDevice->SetFVF(FVF_VERTEX2D);
+	g_d3dDevice->SetTexture(0, Texture_GetTexture(texture_index));
 
 
 
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+	g_d3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	g_d3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	g_d3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
-	g_pD3DDevice->SetStreamSource(0, g_pVertexBuffer, 0, sizeof(Square));
+	g_d3dDevice->SetStreamSource(0, g_pVertexBuffer, 0, sizeof(Square));
 
 	//Square
-	g_pD3DDevice->DrawPrimitiveUP(
+	g_d3dDevice->DrawPrimitiveUP(
 		D3DPT_TRIANGLESTRIP,
 		2,
 		Square,
@@ -126,14 +117,13 @@ void Sprite_Draw(int texture_index, float dx, float dy, int tx, int ty, int tw, 
 
 }
 
-void Sprite_Initialize(void) {
-	LPDIRECT3DDEVICE9 g_pD3DDevice = MyDirect3D_GetDevice();
+void Sprite::Sprite_Initialize(void) {
 
 	//頂点バッファの確保
-	g_pD3DDevice->CreateVertexBuffer(sizeof(Vertex2D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX2D, D3DPOOL_MANAGED, &g_pVertexBuffer, NULL);
+	g_d3dDevice->CreateVertexBuffer(sizeof(Vertex2D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX2D, D3DPOOL_MANAGED, &g_pVertexBuffer, NULL);
 }
 
-void Sprite_Finalize(void) {
+void Sprite::Sprite_Finalize(void) {
 	//頂点バッファの解放
 	if (g_pVertexBuffer) {
 		g_pVertexBuffer->Release();

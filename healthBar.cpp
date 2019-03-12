@@ -1,28 +1,24 @@
-#include <d3d9.h>
 #include "healthBar.h"
 #include "texture.h"
 #include "sprite.h"
-#include "direct3d_setup.h"
 
-static LPD3DXSPRITE sprite;
-static D3DCOLOR color;
-static D3DXVECTOR3 Position;
-static RECT text_rec;
-static LPDIRECT3DDEVICE9 g_pD3DDevice;
+// Ã“Iƒƒ“ƒo•Ï”
+//==================================================
+LPD3DXSPRITE Healthbar::sprite;
+D3DCOLOR Healthbar::color;
+D3DXVECTOR3 Healthbar::Position;
+RECT Healthbar::text_rec;
+float Healthbar::oldHealth;
+float Healthbar::percent;
 
-//bloodbar
-static float oldHealth;
-static float percent;
-
-void Healthbar_Init() {
-	g_pD3DDevice = MyDirect3D_GetDevice();
-	D3DXCreateSprite(g_pD3DDevice, &sprite);
+void Healthbar::Healthbar_Init() {
+	D3DXCreateSprite(g_d3dDevice, &sprite);
 	color = D3DCOLOR_ARGB(255, 255, 255, 255);
 	oldHealth = HEALTHBAR_TOTAL;
 	percent = 1.0f;
 }
 
-void Healthbar_Draw(float x, float y, int nowHealth)
+void Healthbar::Healthbar_Draw(float x, float y, int nowHealth)
 {
 	//show percent
 	if (nowHealth != oldHealth) {
@@ -57,6 +53,6 @@ void Healthbar_Draw(float x, float y, int nowHealth)
 	sprite->End();
 }
 
-void Healthbar_Uninit() {
+void Healthbar::Healthbar_Uninit() {
 	sprite->Release();
 }

@@ -2,7 +2,7 @@
 #define OBJECT_H
 
 #include "common.h"
-#include "sprite.h"
+#include "D3Dsetup.h"
 
 class Object {
 private:
@@ -17,12 +17,11 @@ private:
 	//camera
 	LPD3DXSPRITE sprite;
 	D3DCOLOR color;
+
 public:
 	Object();
 	~Object();
 	void Update();
-	void Draw();
-	virtual void DrawCut();
 
 	void DrawSprite();
 	void DrawSprite(RECT* text_rec);

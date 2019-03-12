@@ -1,22 +1,23 @@
+//==================================================
+//  êîéöÉNÉâÉX [Number.cpp]        Autor:Éç
+//==================================================
+
 #include <d3d9.h>
-#include "number.h"
+#include "Number.h"
 #include "texture.h"
 #include "sprite.h"
-#include "direct3d_setup.h"
 
-static LPD3DXSPRITE sprite;
-static D3DCOLOR color;
-static D3DXVECTOR3 Position;
-static RECT text_rec;
-static LPDIRECT3DDEVICE9 g_pD3DDevice;
+LPD3DXSPRITE Number::sprite;
+D3DCOLOR Number::color;
+D3DXVECTOR3 Number::Position;
+RECT Number::text_rec;
 
-void Number_Init() {
-	g_pD3DDevice = MyDirect3D_GetDevice();
-	D3DXCreateSprite(g_pD3DDevice, &sprite);
+void Number::Number_Init() {
+	D3DXCreateSprite(g_d3dDevice, &sprite);
 	color = D3DCOLOR_ARGB(255, 255, 255, 255);
 }
 
-void Number_Draw(float x, float y, int n)
+void Number::Number_Draw(float x, float y, int n)
 {
 	Position.x = x;
 	Position.y = y;
@@ -28,8 +29,6 @@ void Number_Draw(float x, float y, int n)
 	text_rec.bottom = text_rec.top + NUMBER_HEIGHT;
 
 	if (n < 0 || n > 9) return;
-	/*Sprite_SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));
-	Sprite_Draw(NUMBER, x, y, NUMBER_WIDTH * n, 0, NUMBER_WIDTH, NUMBER_HEIGHT);*/
 
 	sprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_OBJECTSPACE);
 
@@ -38,6 +37,6 @@ void Number_Draw(float x, float y, int n)
 	sprite->End();
 }
 
-void Number_Uninit() {
+void Number::Number_Uninit() {
 	sprite->Release();
 }

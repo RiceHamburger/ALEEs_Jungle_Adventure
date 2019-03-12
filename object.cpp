@@ -1,6 +1,5 @@
 #include "texture.h"
 #include "object.h"
-#include "direct3d_setup.h"
 
 Object::Object()
 {
@@ -15,8 +14,7 @@ Object::Object()
 }
 
 void Object::InitSprite() {
-	LPDIRECT3DDEVICE9 g_pD3DDevice = MyDirect3D_GetDevice();
-	D3DXCreateSprite(g_pD3DDevice, &sprite);
+	D3DXCreateSprite(g_d3dDevice, &sprite);
 }
 
 void Object::Update()
@@ -49,15 +47,6 @@ void Object::DrawSprite(RECT* text_rec) {
 	sprite->Draw(Texture_GetTexture(TextureIndex), text_rec, NULL, &Position, color);
 
 	sprite->End();
-}
-
-void Object::Draw()
-{
-	Sprite_Draw(TextureIndex, position.x, position.y);
-}
-
-void Object::DrawCut() {
-	Sprite_Draw(TextureIndex, position.x, position.y, 64, 0, 64, 64);
 }
 
 void Object::SetObjectData(Vector2D pos, float wid, float hei)

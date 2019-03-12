@@ -1,15 +1,29 @@
-#pragma once
-#ifndef FADE_H
-#define FADE_H
+//==================================================
+//  âÊñ ëJà⁄ÇÃÉNÉâÉX [fade.h]        Autor:Éç
+//==================================================
+#pragma warning
 
-#include <d3d9.h>
+#ifndef FADE_H_
+#define FADE_H_
 
-void Fade_Initialize(void);
-void Fade_Finalize(void);
-void Fade_Update(void);
-void Fade_Draw(void);
+#include "D3Dsetup.h"
 
-void Fade_Start(bool bOut, int frame, D3DCOLOR color);
-bool Fade_IsFade(void);
+class Fade {
+public:
+	Fade();
+	~Fade();
+	void init();
+	void Update();
+	void Draw();
+	void Fade_Start(bool bOut, int frame, D3DCOLOR color);
+	bool Fade_IsFade(void);
 
-#endif
+private:
+	D3DXCOLOR g_FadeColor;
+	float g_Alpha;
+	float g_AddAlpha;
+	bool g_bOut;
+	bool g_bIsFade;
+};
+
+#endif // FADE_H_

@@ -1,214 +1,131 @@
-//プロジェクトにDirect3Dライブラリインクルード
-#include <Windows.h>
-#include <d3dx9.h>
-#include <math.h>
-#include "debugPrintf.h"
-#include "common.h"
-#include "direct3d_setup.h"
-#include "sprite.h"
-#include "game.h"
-#include "input.h"
-#include "fade.h"
+//==================================================
+//  プロジェクトのMAIN [main.cpp]        Autor:ロ
+//==================================================
+
+// インクルードファイル
+//==================================================
+#include "D3Dsetup.h"
+#include <tchar.h>
+#include "texture.h"
+#include "D3DInput.h"
+#include "SceneManager.h"
 #include "sound.h"
+#include "fade.h"
 
-//window設定
-#define CLASS_NAME ("GameWindow")
-#define CLASS_NAMEEX ("GameLouise")
-#define WINDOW_CAPTION ("ALEE's Jungle Adventure")
-#define WINDOW_STYLE (WS_OVERLAPPEDWINDOW ^ (WS_MAXIMIZEBOX | WS_THICKFRAME))
+class ShowcaseD3DApp : public D3DApp
+{
+public:
+	ShowcaseD3DApp(HINSTANCE hInstance, std::string winCaption, D3DDEVTYPE devType, DWORD requestedVP);
+	~ShowcaseD3DApp();
 
-//ウィンドウズプロシージャ（コールバック関数）
-LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	bool checkDeviceCaps();
+	void onLostDevice();
+	void onResetDevice();
+	void initScene();
+	void updateScene();
+	void drawScene();
 
-//ゲームの初期化関数
-static bool Init(HINSTANCE hInstance,HWND hWnd);
-//ゲームの更新関数
-static void Update(void);
-//ゲームの描画関数
-static void Draw(void);
-//ゲームの終了関数
-static void Final(void);
+private:
+	
+};
 
-/*-----------------------------
-	グローバル変数宣言
------------------------------*/
-HWND  hWnd = NULL;
-
-
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdline, int nCmdShow) {
+//main
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdline, int showCmd)
+{
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdline);
 
-	WNDCLASS wc = {}; //何も入れない　*ZeroMemory()
-	wc.lpfnWndProc = WndProc;
-	wc.lpszClassName = CLASS_NAME;
-	wc.hInstance = hInstance;
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND + 1);
+	ShowcaseD3DApp app(hInstance, "Terrain Adventure", D3DDEVTYPE_HAL, D3DCREATE_HARDWARE_VERTEXPROCESSING);
+	g_d3dApp = &app;
 
-	RegisterClass(&wc);
+	D3DInput d3dInput(DISCL_NONEXCLUSIVE | DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	gDInput = &d3dInput;
 
-	DWORD window_style = WINDOW_STYLE;
+	//フェイトインアウト
+	Fade fade;
+	g_Fade = &fade;
 
-	RECT WindowRect = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
-	AdjustWindowRect(&WindowRect, window_style, FALSE);
-
-	//computer Screen width and height
-	int WSCREEN = GetSystemMetrics(SM_CXSCREEN);
-	int HSCREEN = GetSystemMetrics(SM_CYSCREEN);
-
-	//return max number
-	int windows_x = max((WSCREEN - (WindowRect.right - WindowRect.left)) / 2, 0);
-	int windows_y = max((HSCREEN - (WindowRect.bottom - WindowRect.top)) / 2, 0);
-
-	int windows_width = WindowRect.right - WindowRect.left;
-	int windows_height = WindowRect.bottom - WindowRect.top;
-	
-	//HWND hWnd = CreateWindow(
-	hWnd = CreateWindow(
-		CLASS_NAME,
-		WINDOW_CAPTION,
-		window_style,
-		windows_x,
-		windows_y,
-		windows_width,
-		windows_height,
-		NULL,
-		NULL,
-		hInstance,
-		NULL
-	);
-
-	if (hWnd == NULL) {
-		return 0;//失敗時結束程式
-	}
-	//指定のウィンドウズハンドラのウィンドウズ
-	ShowWindow(hWnd, nCmdShow);
-	UpdateWindow(hWnd);
-
-	//------------------------------
-	//ゲームの初期化　DX3Dの初期化
-	//------------------------------
- 	Init(hInstance,hWnd);
-
-	MSG msg = {};
-	do {
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else {
-			//------------------------------
-			//ゲームの更新処理
-			//ゲームの描画
-			//------------------------------
-			Update();
-			Draw();
-		}
-	} while (msg.message != WM_QUIT);
-
-	//ゲームの終了処理（DX3D）
-	Final();
-
-	return (int)msg.wParam;
+	return g_d3dApp->run();
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	switch (uMsg) {
-	case WM_KEYDOWN:
-		if (wParam == VK_ESCAPE) {
-			SendMessage(hWnd, WM_CLOSE, 0, 0);
-		}
-		
-		break;
-	case WM_CLOSE:
-		if (MessageBox(hWnd, "close?", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
-			DestroyWindow(hWnd);//WM_QUIT
-		}
-		return 0;
-	case WM_DESTROY:
+ShowcaseD3DApp::ShowcaseD3DApp(HINSTANCE hInstance, std::string winCaption, D3DDEVTYPE devType, DWORD requestedVP) : D3DApp(hInstance, winCaption, devType, requestedVP)
+{
+	srand(time_t(0));
+
+	if (!checkDeviceCaps())
+	{
+		MessageBox(0, "checkDeviceCaps() Failed", 0, 0);
 		PostQuitMessage(0);
-		return 0;
-	};
-
-	return DefWindowProc(hWnd, uMsg, wParam, lParam);
-}
-
-//ゲームの初期化関数
-bool Init(HINSTANCE hInstance,HWND hWnd) {
-
-	if (!Keyboard_Initialize(hInstance, hWnd)) {
-		return false;
-	}
-
-	/*if (!Xinput_Initialize(hWnd)) {
-		return false;
-	}*/
-
-	//D3Dの初期化
-	if (!MyDirect3D_Initialize(hWnd)) {
-		return false;
 	}
 	
-	//スプライトの初期化
-	Sprite_Initialize();
+}
 
-	InitSound(hWnd);
+ShowcaseD3DApp::~ShowcaseD3DApp()
+{
+	Texture_Release();
+	UninitSound();
+}
 
-	Fade_Initialize();
-
-	//ゲームの初期化
-	if (!Game_Initialize()) {
-		return false;
-	}
-
+bool ShowcaseD3DApp::checkDeviceCaps()
+{
 	return true;
 }
 
-//ゲームの更新関数
-void Update(void) {
-	Keyboard_Update();
-	Xinput_Update();
-	Game_Update();
-	Fade_Update();
+void ShowcaseD3DApp::onLostDevice()
+{
+	SceneManager::LostDevice();
 }
 
-//ゲームの描画関数
-void Draw(void) {
-
-	LPDIRECT3DDEVICE9 g_pD3DDevice = MyDirect3D_GetDevice();
-	if (!g_pD3DDevice) {
-		return;
-	}
-
-	// シーンのクリア clear full screen
-	g_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(0, 0, 0,255), 1.0f, 0);
-
-	//描画開始
-	g_pD3DDevice->BeginScene();
-
-	//ゲームの描画
-	Game_Draw();
-
-	Fade_Draw();
-
-	//描画終了
-	g_pD3DDevice->EndScene();
-
-	g_pD3DDevice->Present(NULL, NULL, NULL, NULL);
-
+void ShowcaseD3DApp::onResetDevice()
+{
+	SceneManager::ResetDevice();
 }
 
-//ゲームの終了関数
-void Final(void) {
-	Game_Finalize();
-	
-	Sprite_Finalize();
+//ゲームの初期化
+void ShowcaseD3DApp::initScene()
+{
+	Texture_Load();
+	InitSound(g_d3dApp->getMainWnd());
 
-	MyDirect3D_Finallize();
+	//Render set
+	//アルファブレンド
+	g_d3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	//背景（既に描かれた状態）DESTのブレンド設定
+	g_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	//今から描くポリゴンSRCのブレンド設定
+	g_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	g_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	g_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+	g_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 
-	Keyboard_Finalize();
-	Xinput_Finalize();
+	SceneManager::ChangeScene(SceneManager::TITLE);
+	onResetDevice();
+}
 
-	UninitSound();
+//ゲームの更新
+void ShowcaseD3DApp::updateScene()
+{
+	//input update
+	gDInput->keyUpdate();
+
+	//fade in/out
+	g_Fade->Update();
+
+	SceneManager::Update();
+}
+
+//ゲームの描画
+void ShowcaseD3DApp::drawScene()
+{
+	HR_CHECK(g_d3dDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0));
+
+	HR_CHECK(g_d3dDevice->BeginScene());
+
+	SceneManager::Draw();
+
+	//fade in/out
+	g_Fade->Draw();
+
+	HR_CHECK(g_d3dDevice->EndScene());
+	HR_CHECK(g_d3dDevice->Present(0, 0, 0, 0));
 }
