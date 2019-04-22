@@ -18,6 +18,79 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="background.cpp" />
+    <ClCompile Include="boss.cpp" />
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="BulletManager.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="D3DInput.cpp" />
+    <ClCompile Include="D3Dsetup.cpp" />
+    <ClCompile Include="EndScene.cpp" />
+    <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemyBullet.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="enemy_red.cpp" />
+    <ClCompile Include="explosion.cpp" />
+    <ClCompile Include="ExplosionManager.cpp" />
+    <ClCompile Include="fade.cpp" />
+    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="healthBar.cpp" />
+    <ClCompile Include="ItemUI.cpp" />
+    <ClCompile Include="Judgment.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Number.cpp" />
+    <ClCompile Include="object.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="PlayerUI.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Score.cpp" />
+    <ClCompile Include="sound.cpp" />
+    <ClCompile Include="sprite.cpp" />
+    <ClCompile Include="texture.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="tonic.cpp" />
+    <ClCompile Include="TonicManager.cpp" />
+    <ClCompile Include="WaterManager.cpp" />
+    <ClCompile Include="water_stain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="background.h" />
+    <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="boss.h" />
+    <ClInclude Include="bullet.h" />
+    <ClInclude Include="BulletManager.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="D3DInput.h" />
+    <ClInclude Include="D3Dsetup.h" />
+    <ClInclude Include="EndScene.h" />
+    <ClInclude Include="enemy.h" />
+    <ClInclude Include="enemyBullet.h" />
+    <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="enemy_red.h" />
+    <ClInclude Include="explosion.h" />
+    <ClInclude Include="ExplosionManager.h" />
+    <ClInclude Include="fade.h" />
+    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="healthBar.h" />
+    <ClInclude Include="ItemUI.h" />
+    <ClInclude Include="Judgment.h" />
+    <ClInclude Include="Number.h" />
+    <ClInclude Include="object.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="PlayerUI.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Score.h" />
+    <ClInclude Include="sound.h" />
+    <ClInclude Include="sprite.h" />
+    <ClInclude Include="texture.h" />
+    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="tonic.h" />
+    <ClInclude Include="TonicManager.h" />
+    <ClInclude Include="WaterManager.h" />
+    <ClInclude Include="water_stain.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6EEBB26F-6265-4543-A8B4-E82038CA7C13}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -97,7 +170,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d9.lib;dinput8.lib;dxguid.lib;d3dx9d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;dinput8.lib;dxguid.lib;d3dx9d.lib;DxErr.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -149,79 +222,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="background.cpp" />
-    <ClCompile Include="boss.cpp" />
-    <ClCompile Include="bullet.cpp" />
-    <ClCompile Include="bullet_Manager.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="direct3d_setup.cpp" />
-    <ClCompile Include="Effect.cpp" />
-    <ClCompile Include="End_Manager.cpp" />
-    <ClCompile Include="enemy.cpp" />
-    <ClCompile Include="enemyBullet.cpp" />
-    <ClCompile Include="enemy_Manager.cpp" />
-    <ClCompile Include="explosion.cpp" />
-    <ClCompile Include="explosion_Manager.cpp" />
-    <ClCompile Include="fade.cpp" />
-    <ClCompile Include="game.cpp" />
-    <ClCompile Include="healthBar.cpp" />
-    <ClCompile Include="input.cpp" />
-    <ClCompile Include="judgment.cpp" />
-    <ClCompile Include="Level1_Manager.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="number.cpp" />
-    <ClCompile Include="object.cpp" />
-    <ClCompile Include="player.cpp" />
-    <ClCompile Include="playerUI.cpp" />
-    <ClCompile Include="score.cpp" />
-    <ClCompile Include="sound.cpp" />
-    <ClCompile Include="sprite.cpp" />
-    <ClCompile Include="spriteObj.cpp" />
-    <ClCompile Include="texture.cpp" />
-    <ClCompile Include="Title_Manager.cpp" />
-    <ClCompile Include="tree.cpp" />
-    <ClCompile Include="tree_Manager.cpp" />
-    <ClCompile Include="water_Manager.cpp" />
-    <ClCompile Include="water_stain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="background.h" />
-    <ClInclude Include="boss.h" />
-    <ClInclude Include="bullet.h" />
-    <ClInclude Include="bullet_Manager.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="common.h" />
-    <ClInclude Include="debugPrintf.h" />
-    <ClInclude Include="direct3d_setup.h" />
-    <ClInclude Include="Effect.h" />
-    <ClInclude Include="End_Manager.h" />
-    <ClInclude Include="enemy.h" />
-    <ClInclude Include="enemyBullet.h" />
-    <ClInclude Include="enemy_Manager.h" />
-    <ClInclude Include="explosion.h" />
-    <ClInclude Include="explosion_Manager.h" />
-    <ClInclude Include="fade.h" />
-    <ClInclude Include="game.h" />
-    <ClInclude Include="healthBar.h" />
-    <ClInclude Include="input.h" />
-    <ClInclude Include="judgment.h" />
-    <ClInclude Include="Level1_Manager.h" />
-    <ClInclude Include="number.h" />
-    <ClInclude Include="object.h" />
-    <ClInclude Include="player.h" />
-    <ClInclude Include="playerUI.h" />
-    <ClInclude Include="score.h" />
-    <ClInclude Include="sound.h" />
-    <ClInclude Include="sprite.h" />
-    <ClInclude Include="spriteObj.h" />
-    <ClInclude Include="texture.h" />
-    <ClInclude Include="Title_Manager.h" />
-    <ClInclude Include="tree.h" />
-    <ClInclude Include="tree_Manager.h" />
-    <ClInclude Include="water_Manager.h" />
-    <ClInclude Include="water_stain.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

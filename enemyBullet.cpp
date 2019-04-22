@@ -1,14 +1,20 @@
 #include "enemyBullet.h"
 
-
+//コンストラクタ
+//==================================================
 EnemyBullet::EnemyBullet() {
 	fAngle = 0.0f;
 	distance = ENEMY_BULLET_DISTANCE;
 }
+
+//デストラクタ
+//==================================================
 EnemyBullet::~EnemyBullet() {
 
 }
 
+//更新処理
+//==================================================
 void EnemyBullet::BulletActive() {
 	Bullet::BulletActive();
 
@@ -25,6 +31,8 @@ void EnemyBullet::BulletActive() {
 	
 }
 
+//弾の移動範囲更新処理
+//==================================================
 void EnemyBullet::ResetDis() {
 	distance = ENEMY_BULLET_DISTANCE;
 }

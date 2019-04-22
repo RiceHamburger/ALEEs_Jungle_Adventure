@@ -7,12 +7,14 @@
 #include "fade.h"
 #define FVF_FADE_VERTEX (D3DFVF_XYZRHW|D3DFVF_DIFFUSE)
 
+//フェイトイアウトの黒い画面用構造体
 typedef struct
 {
 	D3DXVECTOR4 position;
 	D3DCOLOR color;
 } FadeVertex;
 
+//Fadeオブジェクト宣言
 Fade* g_Fade = NULL;
 
 //インスタンス
@@ -34,6 +36,8 @@ void Fade::init() {
 	g_bIsFade = false;
 }
 
+//更新処理
+//==================================================
 void Fade::Update()
 {
 	static float timeElapsed = 0.0f;
@@ -70,6 +74,8 @@ void Fade::Update()
 	//}
 }
 
+//描画処理
+//==================================================
 void Fade::Draw()
 {
 	if (g_Alpha <= 0.0f)

@@ -1,7 +1,10 @@
 #include "EnemyManager.h"
 
+//エネミー配列変数
 Enemy EnemyManager::enemy[ENEMY_MAX];
+//特殊エネミーの変数
 EnemyRed EnemyManager::red_enemy;
+//各エネミー
 Vector2D EnemyManager::enemy_target[ENEMY_MAX][ENEMY_TARGET] = {
 	{ { 400,28 },{ 900,28 },{ 900,70 },{ 400,70 } },
 	{ { 520,265 },{ 778,265 },{ 778,522 },{ 520,522 } },
@@ -11,6 +14,8 @@ Vector2D EnemyManager::enemy_target[ENEMY_MAX][ENEMY_TARGET] = {
 	{ { 1468,742 },{ 1468,862 },{ 1134,862 },{ 1134,741 } }
 };
 
+// 初期化処理
+//==================================================
 void EnemyManager::Enemy_Manager_Init(void) {
 	for (int i = 0;i < ENEMY_MAX;i++) {
 		//エネミーのスピードがランダムにする
@@ -41,6 +46,8 @@ void EnemyManager::Enemy_Manager_Init(void) {
 	red_enemy.SetLiveFlag(true);
 }
 
+// 更新処理
+//==================================================
 void EnemyManager::Enemy_Manager_Update(void) {
 	for (int i = 0;i < ENEMY_MAX;i++) {
 		if (enemy[i].GetLiveFlag()) {
@@ -55,6 +62,8 @@ void EnemyManager::Enemy_Manager_Update(void) {
 	red_enemy.EnemyActive();
 }
 
+// 描画処理
+//==================================================
 void EnemyManager::Enemy_Manager_Draw(void) {
 	for (int i = 0;i < ENEMY_MAX;i++) {
 		if (enemy[i].GetLiveFlag()) {
@@ -70,6 +79,8 @@ void EnemyManager::Enemy_Manager_Draw(void) {
 	}
 }
 
+// 終了処理
+//==================================================
 void EnemyManager::Enemy_Manager_Uninit(void) {
 	for (int i = 0;i < ENEMY_MAX;i++) {
 		if (enemy[i].GetLiveFlag()) {
@@ -85,6 +96,8 @@ void EnemyManager::Enemy_Manager_Uninit(void) {
 	red_enemy.BloodSprite_Uninit();
 }
 
+// エネミー生成処理
+//==================================================
 void EnemyManager::Enemy_Create(float x, float y) {
 	for (int i = 0;i < ENEMY_MAX;i++) {
 		if (!enemy[i].GetLiveFlag()) {
@@ -96,6 +109,8 @@ void EnemyManager::Enemy_Create(float x, float y) {
 	}
 }
 
+// エネミーが実行している確認
+//==================================================
 bool EnemyManager::Enemy_IsEnable(void) {
 	for (int i = 0;i < ENEMY_MAX;i++) {
 		if (enemy[i].GetLiveFlag()) {
@@ -105,6 +120,8 @@ bool EnemyManager::Enemy_IsEnable(void) {
 	return false;
 }
 
+// 赤いエネミーが実行している確認
+//==================================================
 bool EnemyManager::EnemyRed_IsEnable(void) {
 	if (red_enemy.GetLiveFlag()) {
 		return true;
@@ -112,14 +129,20 @@ bool EnemyManager::EnemyRed_IsEnable(void) {
 	return false;
 }
 
+// エネミーポインタを取る
+//==================================================
 Enemy* EnemyManager::EnemyMgrGetEnemy() {
 	return enemy;
 }
 
+// 赤いエネミーポインタを取る
+//==================================================
 EnemyRed* EnemyManager::EnemyRedMgrGetEnemy() {
 	return &red_enemy;
 }
 
+// 全エネミーを動かす
+//==================================================
 void EnemyManager::SetAllEnemyLive(bool flag) {
 	for (int i = 0;i < ENEMY_MAX;i++) {
 		if (enemy[i].GetLiveFlag()) {

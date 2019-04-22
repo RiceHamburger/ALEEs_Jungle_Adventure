@@ -9,6 +9,8 @@
 #include "sound.h"
 #include "fade.h"
 
+// コンストラクタ
+//==================================================
 TitleScene::TitleScene() {
 	m_UI = new Sprite();
 
@@ -20,20 +22,19 @@ TitleScene::TitleScene() {
 	g_Fade->init();
 }
 
-TitleScene::~TitleScene() {
-	
-}
+// デストラクタ
+//==================================================
+TitleScene::~TitleScene() {}
 
 void TitleScene::Update() {
 	static float timeElapsed = 0.0f;
-	//timeElapsed += dt;
 
 	if (!startFadeInOut) {
 		if (gDInput->keyIsTrigger(DIK_SPACE)) {
 			PlaySound(SOUND_LABEL_SE_KEYDOWN);
 
 			//タイトル画面からゲーム画面に
-			//20は回数
+			//1000 = 一秒
 			g_Fade->Fade_Start(true, 500, D3DCOLOR_RGBA(0, 0, 0, 255));
 
 			//フェイトイン開始
@@ -56,21 +57,17 @@ void TitleScene::Update() {
 	}
 
 	//press btn shining
-	//if (timeElapsed >= 0.1f) {
-		countTime--;
+	countTime--;
 
-		if (countTime <= 0) {
-			if (btn_alpha == TITLETEXT_ALPHA) {
-				btn_alpha = 0;
-			}
-			else {
-				btn_alpha = TITLETEXT_ALPHA;
-			}
-			countTime = TITLE_TIME;
+	if (countTime <= 0) {
+		if (btn_alpha == TITLETEXT_ALPHA) {
+			btn_alpha = 0;
 		}
-
-		//timeElapsed = 0.0f;
-	//}
+		else {
+			btn_alpha = TITLETEXT_ALPHA;
+		}
+		countTime = TITLE_TIME;
+	}
 }
 
 void TitleScene::Draw() {

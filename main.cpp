@@ -12,6 +12,7 @@
 #include "sound.h"
 #include "fade.h"
 
+//D3D class
 class ShowcaseD3DApp : public D3DApp
 {
 public:
@@ -30,6 +31,7 @@ private:
 };
 
 //main
+//==================================================
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdline, int showCmd)
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
@@ -48,6 +50,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdli
 	return g_d3dApp->run();
 }
 
+//コンストラクタ
+//==================================================
 ShowcaseD3DApp::ShowcaseD3DApp(HINSTANCE hInstance, std::string winCaption, D3DDEVTYPE devType, DWORD requestedVP) : D3DApp(hInstance, winCaption, devType, requestedVP)
 {
 	srand(time_t(0));
@@ -57,34 +61,44 @@ ShowcaseD3DApp::ShowcaseD3DApp(HINSTANCE hInstance, std::string winCaption, D3DD
 		MessageBox(0, "checkDeviceCaps() Failed", 0, 0);
 		PostQuitMessage(0);
 	}
-	
 }
 
+//デストラクタ
+//==================================================
 ShowcaseD3DApp::~ShowcaseD3DApp()
 {
 	Texture_Release();
 	UninitSound();
 }
 
+//デバイスチェック
+//==================================================
 bool ShowcaseD3DApp::checkDeviceCaps()
 {
 	return true;
 }
 
+//前回のデバイス
+//==================================================
 void ShowcaseD3DApp::onLostDevice()
 {
 	SceneManager::LostDevice();
 }
 
+//デバイスをリセット
+//==================================================
 void ShowcaseD3DApp::onResetDevice()
 {
 	SceneManager::ResetDevice();
 }
 
 //ゲームの初期化
+//==================================================
 void ShowcaseD3DApp::initScene()
 {
+	//全テクスチャをロードする
 	Texture_Load();
+	//音声をロードする
 	InitSound(g_d3dApp->getMainWnd());
 
 	//Render set
@@ -98,11 +112,13 @@ void ShowcaseD3DApp::initScene()
 	g_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
 	g_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 
+	//タイトルをロードする
 	SceneManager::ChangeScene(SceneManager::TITLE);
 	onResetDevice();
 }
 
 //ゲームの更新
+//==================================================
 void ShowcaseD3DApp::updateScene()
 {
 	//input update
@@ -111,16 +127,19 @@ void ShowcaseD3DApp::updateScene()
 	//fade in/out
 	g_Fade->Update();
 
+	//更新
 	SceneManager::Update();
 }
 
 //ゲームの描画
+//==================================================
 void ShowcaseD3DApp::drawScene()
 {
 	HR_CHECK(g_d3dDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0));
 
 	HR_CHECK(g_d3dDevice->BeginScene());
 
+	//描画
 	SceneManager::Draw();
 
 	//fade in/out

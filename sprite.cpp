@@ -66,6 +66,7 @@ void Sprite::Sprite_Draw(int texture_index, float dx, float dy) {
 }
 
 //画像インデックス、X座標、Y座標、テクスチャの画像X座標、テクスチャの画像Y座標、画像の横サイズ、画像の立てサイズ
+//==================================================
 void Sprite::Sprite_Draw(int texture_index, float dx, float dy, int tx, int ty, int tw, int th) {
 	
 	float texture_width = Texture_GetWidth(texture_index);
@@ -100,7 +101,6 @@ void Sprite::Sprite_Draw(int texture_index, float dx, float dy, int tx, int ty, 
 	g_d3dDevice->SetTexture(0, Texture_GetTexture(texture_index));
 
 
-
 	g_d3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	g_d3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 	g_d3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
@@ -117,11 +117,13 @@ void Sprite::Sprite_Draw(int texture_index, float dx, float dy, int tx, int ty, 
 
 }
 
+// 初期化処理
+//==================================================
 void Sprite::Sprite_Initialize(void) {
-
 	//頂点バッファの確保
 	g_d3dDevice->CreateVertexBuffer(sizeof(Vertex2D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX2D, D3DPOOL_MANAGED, &g_pVertexBuffer, NULL);
 }
+
 
 void Sprite::Sprite_Finalize(void) {
 	//頂点バッファの解放

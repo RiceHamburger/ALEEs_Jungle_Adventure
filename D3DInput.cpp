@@ -7,6 +7,8 @@
 
 D3DInput* gDInput = 0;
 
+//コンストラクタ
+//==================================================
 D3DInput::D3DInput(DWORD keyboardCoopFlags, DWORD mouseCoopFlags)
 {
 	ZeroMemory(mKeyboardState, sizeof(mKeyboardState));
@@ -32,6 +34,8 @@ D3DInput::D3DInput(DWORD keyboardCoopFlags, DWORD mouseCoopFlags)
 	HR_CHECK(mMouse->Acquire());
 }
 
+//デストラクタ
+//==================================================
 D3DInput::~D3DInput()
 {
 	RELEASE_OBJ(mDInput);
@@ -102,11 +106,15 @@ void D3DInput::keyUpdate()
 	}
 }
 
+//キー入力処理
+//==================================================
 bool D3DInput::keyDown(char key)
 {
 	return (mKeyboardState[key] & 0x80) != 0;
 }
 
+//キー入力一回処理
+//==================================================
 bool D3DInput::keyIsTrigger(char key)
 {
 	return (g_aKeyStateTrigger[key] & 0x80) != 0;
@@ -117,11 +125,15 @@ bool D3DInput::keyIsRelease(char key)
 	return (g_aKeyStateRelease[key] & 0x80) != 0;
 }
 
+//マウス入力処理
+//==================================================
 bool D3DInput::mouseButtonDown(int button)
 {
 	return (mMouseState.rgbButtons[button] & 0x80) != 0;
 }
 
+//マウスY軸移動処理
+//==================================================
 float D3DInput::mouseDY()
 {
 	POINT po;

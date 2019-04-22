@@ -4,7 +4,9 @@
 
 #include "D3Dsetup.h"
 
+//D3D_APP共通用ポインタ
 D3DApp* g_d3dApp = 0;
+//D3D_Device共通用ポインタ
 LPDIRECT3DDEVICE9 g_d3dDevice = 0;
 
 LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -16,6 +18,8 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
+//コンストラクタ
+//==================================================
 D3DApp::D3DApp(HINSTANCE hInstance, std::string winCaption, D3DDEVTYPE devType, DWORD requestedVP)
 {
 	mMainWndCaption = winCaption;
@@ -32,6 +36,8 @@ D3DApp::D3DApp(HINSTANCE hInstance, std::string winCaption, D3DDEVTYPE devType, 
 	initDirect3D();
 }
 
+//デストラクタ
+//==================================================
 D3DApp::~D3DApp()
 {
 	RELEASE_OBJ(md3dObject);
@@ -48,6 +54,8 @@ HWND D3DApp::getMainWnd()
 	return mhMainWnd;
 }
 
+//ウィンドウズ初期化処理
+//==================================================
 void D3DApp::initMainWindow()
 {
 	WNDCLASS wc = {}; //何も入れない
@@ -85,6 +93,8 @@ void D3DApp::initMainWindow()
 	UpdateWindow(mhMainWnd);
 }
 
+//D3D初期化処理
+//==================================================
 void D3DApp::initDirect3D()
 {
 	// D3Dオブジェクトを作る
@@ -139,6 +149,8 @@ void D3DApp::initDirect3D()
 		&g_d3dDevice));      
 }
 
+//更新処理
+//==================================================
 int D3DApp::run()
 {
 	MSG  msg;
@@ -187,6 +199,8 @@ int D3DApp::run()
 	return (int)msg.wParam;
 }
 
+//メッセージ処理
+//==================================================
 LRESULT D3DApp::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	// アプリが小さいウィンドウズかそれとも大きいウィンドウズか
@@ -272,6 +286,8 @@ LRESULT D3DApp::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(mhMainWnd, msg, wParam, lParam);
 }
 
+//FULL画面MODE処理
+//==================================================
 void D3DApp::enableFullScreenMode(bool enable)
 {
 	// FULLSCREEN

@@ -1,12 +1,18 @@
 #include "explosion.h"
 
+//コンストラクタ
+//==================================================
 Explosion::Explosion() {
 
 }
+//デストラクタ
+//==================================================
 Explosion::~Explosion() {
 
 }
 
+//初期化処理
+//==================================================
 void Explosion::InitExplosion(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX,int tex_pic_numY) {
 	SetPosition(pos);
 	SetTextureIndex(tex_name);
@@ -27,6 +33,8 @@ void Explosion::InitExplosion(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_n
 	text_rec.bottom = text_rec.top + GetHeight();
 }
 
+//更新処理
+//==================================================
 void Explosion::ExplosionActive() {
 	aniTime--;
 	if (aniTime <= 0) {
@@ -52,6 +60,8 @@ void Explosion::ExplosionActive() {
 	}
 }
 
+//消す処理
+//==================================================
 void Explosion::ExplosionDestroy() {
 	textureX_index = 0;
 	textureY_index = 0;
@@ -60,10 +70,8 @@ void Explosion::ExplosionDestroy() {
 	text_rec = { 0 };
 }
 
-/*void Explosion::DrawCut() {
-	Sprite_Draw(GetTextureIndex(), GetPosition().x, GetPosition().y, textureX, textureY, GetWidth(), GetHeight());
-}*/
-
+//範囲を取る
+//==================================================
 RECT* Explosion::GetRect() {
 	return &text_rec;
 }

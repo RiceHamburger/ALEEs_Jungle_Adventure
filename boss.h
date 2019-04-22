@@ -3,6 +3,7 @@
 #include "texture.h"
 #include "object.h"
 
+//–‚‰¤‰æ‘œ‚ÌL‚³
 #define BOSS_WIDTH (228)
 #define BOSS_HEIGHT (449)
 #define BOSS_SCORE (2)
@@ -20,17 +21,19 @@
 #define BOSS_HEALTHBAR_Y (717)
 #define BOSS_HEALTHBARUI_Y (690)
 
-//attack time
+//–‚‰¤‚Ì•’ÊUŒ‚‚ÌŠÔŠÔŠu
 #define BOSS_ATTACK_TIME (600)
+//–‚‰¤‚Ì‘å‚«‚¢UŒ‚‚ÌŠÔŠÔŠuMAX
 #define BOSS_BIGATTACK_TIME_MAX (1200)
+//–‚‰¤‚Ì‘å‚«‚¢UŒ‚‚ÌŠÔŠÔŠuMIN
 #define BOSS_BIGATTACK_TIME_MIN (300)
 
 //effect time
 #define BOSS_EFFECT_TIME (100)
 
-//y-
+//–‚‰¤À•W‚Ì‰Šú’l
 #define BOSS_Y (145)
-
+//–‚‰¤‚ÌˆÚ“®ƒ^[ƒQƒbƒg”—Ê
 #define BOSS_TARGET (4)
 
 typedef enum

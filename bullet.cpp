@@ -1,18 +1,22 @@
 #include "bullet.h"
 #define MAP_NUM_X (84)
 
+//コンストラクタ
+//==================================================
 Bullet::Bullet() {
 
 }
+//デストラクタ
+//==================================================
 Bullet::~Bullet() {
 
 }
-
+//初期化処理
+//==================================================
 void Bullet::InitBullet(Vector2D pos, TEXTURE_NAME tex_name) {
 	Circle objCollision;
 	SetPosition(pos);
 	SetTextureIndex(tex_name);
-	//SetWidth(BULLET_WIDTH);
 	SetWidth(Texture_GetWidth(tex_name));
 	SetHeight(Texture_GetHeight(tex_name));
 
@@ -23,6 +27,8 @@ void Bullet::InitBullet(Vector2D pos, TEXTURE_NAME tex_name) {
 	SetCircleCollision(objCollision);
 }
 
+//更新処理
+//==================================================
 void Bullet::BulletActive() {
 	Vector2D position = GetPosition();
 
@@ -45,33 +51,39 @@ void Bullet::BulletActive() {
 	Update();
 }
 
+//消す処理
+//==================================================
 void Bullet::BulletDestroy() {
 	SetLiveFlag(false);
 }
 
+//速度設定処理
+//==================================================
 void Bullet::SetSpeed(float Speedx, float Speedy) {
 	speedX = Speedx;
 	speedY = Speedy;
 }
 
-/*float Bullet::GetSpeed() {
-	return speed;
-}*/
-
+//損傷設定処理
+//==================================================
 void Bullet::SetDamage(int hit) {
 	bulletDamage = hit;
 }
 
+//損傷を取る処理
+//==================================================
 int Bullet::GetDamage() {
 	return bulletDamage;
 }
 
 //範囲セット
+//==================================================
 void Bullet::SetWalkRang(int* rang) {
 	MoveRank = rang;
 }
 
 //範囲チェック
+//==================================================
 bool Bullet::RangCheck(float x, float y) {
 	int gx = x / 32;
 	int gy = y / 32;

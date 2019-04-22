@@ -12,8 +12,11 @@
 #include "sound.h"
 #include "Number.h"
 
+//スコーアのX座標
 #define END_SCORE_X (440)
+//新しいスコーアのY座標
 #define END_SCORE_Y_NOW (339)
+//古いスコーアのY座標
 #define END_SCORE_Y_OLD (499)
 
 // 静的メンバ変数
@@ -24,6 +27,8 @@ bool EndScene::endFadeOver = false;
 int EndScene::endShowScore = 0;
 int EndScene::endShowScoreBest = 0;
 
+//コンストラクタ
+//==================================================
 EndScene::EndScene() {
 	m_UI = new Sprite();
 	m_UI->Sprite_Initialize();
@@ -34,11 +39,14 @@ EndScene::EndScene() {
 	endFadeOver = false;
 	PlaySound(SOUND_LABEL_BGM003);
 }
-
+//デストラクタ
+//==================================================
 EndScene::~EndScene() {
 	
 }
 
+//更新処理
+//==================================================
 void EndScene::Update() {
 	//if fading return
 	if (g_Fade->Fade_IsFade()) {
@@ -69,6 +77,8 @@ void EndScene::Update() {
 	}
 }
 
+//描画処理
+//==================================================
 void EndScene::Draw() {
 	if (endFadeOver && !endToStartFadeInOut) {
 		m_UI->Sprite_Draw(TITLE, (SCREEN_WIDTH - Texture_GetWidth(TITLE)) / 2, (SCREEN_HEIGHT - Texture_GetHeight(TITLE)) / 3);
@@ -97,10 +107,14 @@ void EndScene::Draw() {
 	}
 }
 
+//前回のデバイス
+//==================================================
 void EndScene::LostDevice() {
 	
 }
 
+//デバイスをリセット
+//==================================================
 void EndScene::ResetDevice() {
 
 	

@@ -19,10 +19,13 @@ void Object::InitSprite() {
 
 void Object::Update()
 {
+	//ˆÚ“®—Ê‚ğ‰ÁZ
 	position.x += move.x;
 	position.y += move.y;
 }
 
+// •`‰æˆ—
+//==================================================
 void Object::DrawSprite() {
 	D3DXVECTOR3 Position;
 	Position.x = position.x;

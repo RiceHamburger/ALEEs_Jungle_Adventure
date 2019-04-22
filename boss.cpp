@@ -2,6 +2,8 @@
 #include "D3Dsetup.h"
 #include "bulletManager.h"
 
+// 初期化処理
+//==================================================
 void Boss::Init(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, int tex_pic_numY) {
 	Circle objCollision;
 	SetPosition(pos);
@@ -53,6 +55,8 @@ void Boss::Init(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, int tex_p
 	activeCount = 0;
 }
 
+//更新処理
+//==================================================
 void Boss::Active() {
 	Vector2D position = GetPosition();
 
@@ -142,6 +146,8 @@ void Boss::Active() {
 	}
 }
 
+//生命力設定処理
+//==================================================
 void Boss::SetLife(int Life) {
 	life = Life;
 	if (life <= 0) {
@@ -149,37 +155,51 @@ void Boss::SetLife(int Life) {
 	}
 }
 
+//スコーア設定処理
+//==================================================
 void Boss::SetScore(int Score) {
 	score = Score;
 }
 
+//速度設定処理
+//==================================================
 void Boss::SetSpeed(float Speed) {
 	speed = Speed;
 }
 
+//損傷を取る処理
+//==================================================
 int Boss::GetScore() {
 	return score;
 }
+//損傷を取る処理
+//==================================================
 int Boss::GetLife() {
 	return life;
 }
+//損傷を取る処理
+//==================================================
 RECT* Boss::GetRect() {
 	return &text_rec;
 }
 
+//HPバー初期化処理
+//==================================================
 void Boss::InitBloodSprite() {
 	D3DXCreateSprite(g_d3dDevice, &health_sprite);
 	D3DXCreateSprite(g_d3dDevice, &healthUI_sprite);
 }
 
+//HPバー解放処理
+//==================================================
 void Boss::BloodSprite_Uninit() {
-	//if (health_sprite) {
-		health_sprite->Release();
-	//}
 	
+	health_sprite->Release();
 	healthUI_sprite->Release();
 }
 
+//HPバーの描画処理
+//==================================================
 void Boss::DrawBloodSprite(float UIx, float UIy, float BARx, float BARy) {
 	//UI BG
 	healthUI_Position.x = UIx;
@@ -217,23 +237,33 @@ void Boss::DrawBloodSprite(float UIx, float UIy, float BARx, float BARy) {
 	health_sprite->End();
 }
 
+//行動フラグ設定
+//==================================================
 void Boss::SetActiveflag(bool flag) {
 	bossActiv = flag;
 }
 
+//行動フラグ取る
+//==================================================
 bool Boss::GetActiveflag() {
 	return bossActiv;
 }
 
+//当てられたら傷害の効果を表示する時間設定
+//==================================================
 void Boss::SetDamageEffect(bool sw) {
 	Effect = sw;
 	Effect_time = BOSS_EFFECT_TIME;
 }
 
+//体の傷害値を取る
+//==================================================
 int Boss::GetEnemyBodyDamage() {
 	return bodydamage;
 }
 
+//ラジアン計算処理
+//==================================================
 float Boss::getRadian(float X1, float Y1, float X2, float Y2) {
 	float w = X2 - X1;
 	float h = Y2 - Y1;
@@ -241,22 +271,30 @@ float Boss::getRadian(float X1, float Y1, float X2, float Y2) {
 	return atan2f(h, w);
 }
 
+//目標の座標を設定する
+//==================================================
 void Boss::SetTargetArr(Vector2D MtargetArr) {
 	targetArr[targetIndex].x = MtargetArr.x;
 	targetArr[targetIndex].y = MtargetArr.y;
 	targetIndex++;
 }
 
+//目標の座標配列を消す
+//==================================================
 void Boss::DeletTargetArr() {
 	for (int i = 0;i < BOSS_TARGET;i++) {
 		targetArr[i] = { 0 };
 	}
 }
 
+//目標のインデックスを設定する
+//==================================================
 void Boss::SetTargetIndex(int index) {
 	targetIndex = index;
 }
 
+//攻撃処理
+//==================================================
 void Boss::Attack() {
 	attackTime--;
 	if (attackTime <= 0) {

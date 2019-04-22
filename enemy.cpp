@@ -2,13 +2,19 @@
 #include "D3Dsetup.h"
 #include "BulletManager.h"
 
+//コンストラクタ
+//==================================================
 Enemy::Enemy() {
 
 }
+//デストラクタ
+//==================================================
 Enemy::~Enemy() {
 
 }
 
+// 初期化処理
+//==================================================
 void Enemy::InitEnemy(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, int tex_pic_numY) {
 	Circle objCollision;
 	SetPosition(pos);
@@ -48,16 +54,22 @@ void Enemy::InitEnemy(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, int
 	Effect_time = ENEMY_EFFECT_TIME;
 }
 
+//目標の座標を設定する
+//==================================================
 void Enemy::SetTargetArr(Vector2D MtargetArr) {
 	targetArr[targetIndex].x = MtargetArr.x;
 	targetArr[targetIndex].y = MtargetArr.y;
 	targetIndex++;
 }
 
+//目標のインデックスを設定する
+//==================================================
 void Enemy::SetTargetIndex(int index) {
 	targetIndex = index;
 }
 
+//更新処理
+//==================================================
 void Enemy::EnemyActive() {
 	Vector2D position = GetPosition();
 
@@ -114,10 +126,14 @@ void Enemy::EnemyActive() {
 	}
 }
 
+//エネミーを削除処理
+//==================================================
 void Enemy::EnemyDestroy() {
 	SetLiveFlag(false);
 }
 
+//HP設定
+//==================================================
 void Enemy::SetLife(int Life) {
 	life = Life;
 	if (life <= 0) {
@@ -125,36 +141,52 @@ void Enemy::SetLife(int Life) {
 	}
 }
 
+//スコーア設定
+//==================================================
 void Enemy::SetScore(int Score) {
 	score = Score;
 }
 
+//スピード設定
+//==================================================
 void Enemy::SetSpeed(float Speed) {
 	speed = Speed * 0.2f;
 }
 
+//スピードを取る
+//==================================================
 float Enemy::GetSpeed() {
 	return speed;
 }
 
+//スコーアを取る
+//==================================================
 int Enemy::GetScore() {
 	return score;
 }
 
+//エネミー範囲を取る
+//==================================================
 RECT* Enemy::GetRect() {
 	return &text_rec;
 }
 
+//HPを取る
+//==================================================
 int Enemy::GetLife() {
 	return life;
 }
 
+//目標座標配列を消す
+//==================================================
 void Enemy::DeletTargetArr() {
 	for (int i = 0;i < ENEMY_TARGET;i++) {
 		targetArr[i] = { 0 };
 	}
 }
 
+//ラジアン計算処理
+//==================================================
 float Enemy::getRadian(float X1, float Y1, float X2, float Y2) {
 	float w = X2 - X1; // cosθ
 	float h = Y2 - Y1; // sinθ
@@ -163,18 +195,26 @@ float Enemy::getRadian(float X1, float Y1, float X2, float Y2) {
 	return atan2f(h, w);
 }
 
+//エネミーの体の処理値を取る
+//==================================================
 int Enemy::GetEnemyBodyDamage() {
 	return bodydamage;
 }
 
+//HPバー初期化処理
+//==================================================
 void Enemy::InitBloodSprite() {
 	D3DXCreateSprite(g_d3dDevice, &health_sprite);
 }
 
+//HPバー廃棄処理
+//==================================================
 void Enemy::BloodSprite_Uninit() {
 	health_sprite->Release();
 }
 
+//HPバーの描画処理
+//==================================================
 void Enemy::DrawBloodSprite() {
 	Vector2D Myposition = GetPosition();
 
@@ -197,6 +237,8 @@ void Enemy::DrawBloodSprite() {
 	health_sprite->End();
 }
 
+//エネミー再生処理
+//==================================================
 void Enemy::EnemyRespawn() {
 	reSpawnTime--;
 	if (reSpawnTime <= 0) {
@@ -211,6 +253,8 @@ void Enemy::EnemyRespawn() {
 	}
 }
 
+//エネミー攻撃処理
+//==================================================
 void Enemy::EnemyAttack() {
 	attackTime--;
 	if (attackTime <= 0) {
@@ -219,6 +263,8 @@ void Enemy::EnemyAttack() {
 	}
 }
 
+//当てられたら傷害の効果を表示する時間設定
+//==================================================
 void Enemy::SetDamageEffect(bool sw) {
 	Effect = sw;
 	Effect_time = ENEMY_EFFECT_TIME;

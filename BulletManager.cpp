@@ -12,6 +12,8 @@ Bullet BulletManager::bullet[BULLET_MAX];
 EnemyBullet BulletManager::Enemybullet[ENEMY_BULLET_MAX];
 EnemyBullet BulletManager::BossBigbullet[BOSS_BIGBULLET_MAX];
 
+//初期化処理
+//==================================================
 void BulletManager::Bullet_Manager_Init(void) {
 	Vector2D pos = { 0.0f, 0.0f };
 
@@ -49,6 +51,8 @@ void BulletManager::Bullet_Manager_Init(void) {
 	}
 }
 
+//更新処理
+//==================================================
 void BulletManager::Bullet_Manager_Update(void) {
 	for (int i = 0;i < BULLET_MAX;i++) {
 		if (bullet[i].GetLiveFlag()) {
@@ -69,6 +73,8 @@ void BulletManager::Bullet_Manager_Update(void) {
 	}
 }
 
+//描画処理
+//==================================================
 void BulletManager::Bullet_Manager_Draw(void) {
 
 	for (int i = 0;i < BULLET_MAX;i++) {
@@ -90,6 +96,8 @@ void BulletManager::Bullet_Manager_Draw(void) {
 	}
 }
 
+//解放処理
+//==================================================
 void BulletManager::Bullet_Manager_Uninit(void) {
 	for (int i = 0;i < BULLET_MAX;i++) {
 		bullet[i].Sprite_Uninit();
@@ -104,6 +112,8 @@ void BulletManager::Bullet_Manager_Uninit(void) {
 	}
 }
 
+//プレーヤーの弾を出す処理
+//==================================================
 void BulletManager::Bullet_Create(float x, float y, float b_x, float b_y) {
 	for (int i = 0;i < BULLET_MAX;i++) {
 		if (!bullet[i].GetLiveFlag()) {
@@ -116,8 +126,10 @@ void BulletManager::Bullet_Create(float x, float y, float b_x, float b_y) {
 	}
 }
 
+//エネミーの弾を出す処理
+//==================================================
 void BulletManager::EnemyBullet_Create(float x, float y) {
-	//fAngle = 0.0f;
+	
 	float b_x;
 	float b_y;
 	Player *p_Player = GameScene::GetPlayer();
@@ -142,6 +154,8 @@ void BulletManager::EnemyBullet_Create(float x, float y) {
 	}
 }
 
+//魔王の弾を出す処理
+//==================================================
 void BulletManager::BossBullet_Create(float x, float y) {
 	float b_x;
 	float b_y;
@@ -178,7 +192,8 @@ void BulletManager::BossBullet_Create(float x, float y) {
 	}
 }
 
-//big
+//魔王の大きい弾を出す処理
+//==================================================
 void BulletManager::BossBigBullet_Create(float x, float y) {
 	float b_x;
 	float b_y;
@@ -204,6 +219,8 @@ void BulletManager::BossBigBullet_Create(float x, float y) {
 	}
 }
 
+//プレーヤーが使っている弾のフラグチェック
+//==================================================
 bool BulletManager::Bullet_IsEnable(void) {
 	for (int i = 0;i < BULLET_MAX;i++) {
 		if (bullet[i].GetLiveFlag()) {
@@ -213,6 +230,8 @@ bool BulletManager::Bullet_IsEnable(void) {
 	return false;
 }
 
+//エネミーが使っている弾のフラグチェック
+//==================================================
 bool BulletManager::EnemyBullet_IsEnable(void) {
 	for (int i = 0;i < ENEMY_BULLET_MAX;i++) {
 		if (Enemybullet[i].GetLiveFlag()) {
@@ -222,6 +241,8 @@ bool BulletManager::EnemyBullet_IsEnable(void) {
 	return false;
 }
 
+//魔王が使っている弾のフラグチェック
+//==================================================
 bool BulletManager::BossBigBullet_IsEnable(void) {
 	for (int i = 0;i < BOSS_BIGBULLET_MAX;i++) {
 		if (BossBigbullet[i].GetLiveFlag()) {
@@ -231,18 +252,26 @@ bool BulletManager::BossBigBullet_IsEnable(void) {
 	return false;
 }
 
+//プレーヤーの弾のポインタを取る
+//==================================================
 Bullet* BulletManager::BulletMgrGetBullet() {
 	return bullet;
 }
 
+//エネミーの弾のポインタを取る
+//==================================================
 EnemyBullet* BulletManager::BulletMgrGetEnemyBullet() {
 	return Enemybullet;
 }
 
+//魔王の弾のポインタを取る
+//==================================================
 EnemyBullet* BulletManager::BulletMgrGetBossBigBullet() {
 	return BossBigbullet;
 }
 
+//角度計算処理
+//==================================================
 float BulletManager::GetAngle(float meX, float meY, float targetX, float targetY)
 {
 	float w = targetX - meX; // cosθ
@@ -252,7 +281,8 @@ float BulletManager::GetAngle(float meX, float meY, float targetX, float targetY
 }
 
 
-//red
+//赤いスライムの攻撃方法処理
+//==================================================
 void BulletManager::EnemyRedBullet_Create(float x, float y, float setAngle) {
 	//fAngle = 0.0f;
 	float b_x;

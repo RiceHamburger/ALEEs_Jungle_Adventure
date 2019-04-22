@@ -1,6 +1,7 @@
 #include "Camera.h"
-//#include "D3Dsetup.h"
 
+//コンストラクタ
+//==================================================
 Camera::Camera(int width, int height, float angle, DirectX::XMFLOAT3 scaleFactors)
 {
 
@@ -21,11 +22,15 @@ Camera::Camera(int width, int height, float angle, DirectX::XMFLOAT3 scaleFactor
 	canSeeRange.bottom = cameraY + SCREEN_HEIGHT / 2;
 }
 
+//デストラクタ
+//==================================================
 Camera::~Camera()
 {
 
 }
 
+//更新処理
+//==================================================
 void Camera::Update()
 {
 	if (this->following)
@@ -47,16 +52,22 @@ void Camera::Update()
 	);
 }
 
+//フォローする目標を設定する
+//==================================================
 void Camera::Follow(Player* following)
 {
 	this->following = following;
 }
 
+//フォローしているか
+//==================================================
 bool Camera::IsFollowing() const
 {
 	return this->following != NULL;
 }
 
+//Transform設定処理
+//==================================================
 void Camera::SetTransform()
 {
 	g_d3dDevice->SetTransform(D3DTS_PROJECTION, &orthographicMatrix);
@@ -64,35 +75,51 @@ void Camera::SetTransform()
 	g_d3dDevice->SetTransform(D3DTS_VIEW, &viewMatrix);
 }
 
+//カメラ見える範囲の左X座標を取る
+//==================================================
 int Camera::GetcameraLX() {
 	return this->cameraX - this->width / 2;
 }
 
+//カメラ見える範囲の左Y座標を取る
+//==================================================
 int Camera::GetcameraLY() {
 	return this->cameraY - this->height / 2;
 }
 
+//カメラX座標を取る
+//==================================================
 int Camera::GetcameraX() {
 	return this->cameraX;
 }
 
+//カメラY座標を取る
+//==================================================
 int Camera::GetcameraY() {
 	return this->cameraY;
 }
 
+//フォローしない設定
+//==================================================
 void Camera::Unfollow()
 {
 	this->following = NULL;
 }
 
+//X座標を設定する
+//==================================================
 void Camera::SetPositionX(int x) {
 	this->cameraX += x;
 }
 
+//Y座標を設定する
+//==================================================
 void Camera::SetPositionY(int y) {
 	this->cameraY += y;
 }
 
+//カメラが見える範囲を取る
+//==================================================
 RECT* Camera::GetCameraRange() {
 	return &canSeeRange;
 }
