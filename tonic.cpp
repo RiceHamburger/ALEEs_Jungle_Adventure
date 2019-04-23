@@ -1,13 +1,21 @@
+//==================================================
+// アイテムクラス [tonic.cpp]        Autor:ロ
+//==================================================
 #include "tonic.h"
 
-
+//インスタンス
+//==================================================
 Tonic::Tonic() {
 
 }
+//デストラクタ
+//==================================================
 Tonic::~Tonic() {
 
 }
 
+// 初期化処理
+//==================================================
 void Tonic::InitTonic(Vector2D pos, TEXTURE_NAME tex_name,TonicState state) {
 	Circle objCollision;
 	SetPosition(pos);
@@ -25,24 +33,34 @@ void Tonic::InitTonic(Vector2D pos, TEXTURE_NAME tex_name,TonicState state) {
 	this_TonicState = state;
 }
 
+//更新処理
+//==================================================
 void Tonic::TonicActive() {
 
 }
 
+//廃棄処理
+//==================================================
 void Tonic::TonicDestroy() {
 	SetLiveFlag(false);
 }
 
+//生命力を取る
+//==================================================
 int Tonic::GetAddHealth() {
 	return addHealth;
 }
 
+//コリジョンを取る
+//==================================================
 void Tonic::resetCollision() {
 	Vector2D position = GetPosition();
 	SetCircleCollisionX(position.x + GetWidth() / 2);
 	SetCircleCollisionY(position.y + GetWidth() / 2);
 }
 
+//アイテムのタイプを取る
+//==================================================
 int Tonic::GetState() {
 	return this_TonicState;
 }

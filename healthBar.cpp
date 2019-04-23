@@ -1,3 +1,6 @@
+//==================================================
+//  HPバークラス [healthBar.cpp]        Autor:ロ
+//==================================================
 #include "healthBar.h"
 #include "texture.h"
 #include "sprite.h"
@@ -11,6 +14,8 @@ RECT Healthbar::text_rec;
 float Healthbar::oldHealth;
 float Healthbar::percent;
 
+// 初期化処理
+//==================================================
 void Healthbar::Healthbar_Init() {
 	D3DXCreateSprite(g_d3dDevice, &sprite);
 	color = D3DCOLOR_ARGB(255, 255, 255, 255);
@@ -18,6 +23,8 @@ void Healthbar::Healthbar_Init() {
 	percent = 1.0f;
 }
 
+//描画処理
+//==================================================
 void Healthbar::Healthbar_Draw(float x, float y, int nowHealth)
 {
 	//show percent
@@ -53,6 +60,8 @@ void Healthbar::Healthbar_Draw(float x, float y, int nowHealth)
 	sprite->End();
 }
 
+//終了処理
+//==================================================
 void Healthbar::Healthbar_Uninit() {
 	sprite->Release();
 }

@@ -1,7 +1,6 @@
 //==================================================
 //  spriteクラス [Sprite.cpp]        Autor:ロ
 //==================================================
-
 #include <d3dx9.h>
 #include "texture.h"
 #include "D3Dsetup.h"
@@ -20,6 +19,7 @@ void Sprite::Sprite_SetColor(D3DCOLOR color) {
 }
 
 //画像インデックス、X座標、Y座標
+//==================================================
 void Sprite::Sprite_Draw(int texture_index, float dx, float dy) {
 
 	float texture_width = (float)Texture_GetWidth(texture_index);
@@ -124,7 +124,8 @@ void Sprite::Sprite_Initialize(void) {
 	g_d3dDevice->CreateVertexBuffer(sizeof(Vertex2D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX2D, D3DPOOL_MANAGED, &g_pVertexBuffer, NULL);
 }
 
-
+//終了処理
+//==================================================
 void Sprite::Sprite_Finalize(void) {
 	//頂点バッファの解放
 	if (g_pVertexBuffer) {

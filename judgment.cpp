@@ -11,8 +11,11 @@
 #include "sound.h"
 #include "TonicManager.h"
 
+//BOSS戦開始エリア
 RECT Judgment::endArea = { 2283,449,2424,510 };
 
+//円の当たり判定処理
+//==================================================
 bool Judgment::Collision_HitCircle(const Circle* p_Circle_a, const Circle* p_Circle_b) {
 	float L_dis = p_Circle_a->r + p_Circle_b->r;
 
@@ -21,6 +24,8 @@ bool Judgment::Collision_HitCircle(const Circle* p_Circle_a, const Circle* p_Cir
 	return C_c < L_dis * L_dis;
 }
 
+//弾とエネミーの判定処理
+//==================================================
 void Judgment::Judgment_Bullet_vs_Enemy(void) {
 	//弾とエネミーは有効か？
 	if (!EnemyManager::Enemy_IsEnable() || !BulletManager::Bullet_IsEnable()) {
@@ -73,6 +78,8 @@ void Judgment::Judgment_Bullet_vs_Enemy(void) {
 
 }
 
+//弾とエネミーの判定処理
+//==================================================
 void Judgment::Judgment_Bullet_vs_Player(void) {
 	Player *p_Player = GameScene::GetPlayer();
 
@@ -105,6 +112,8 @@ void Judgment::Judgment_Bullet_vs_Player(void) {
 	}
 }
 
+//プレーヤーとエネミーの判定処理
+//==================================================
 void Judgment::Judgment_Player_vs_Enemy(void) {
 	Player *p_Player = GameScene::GetPlayer();
 	if (!EnemyManager::Enemy_IsEnable() || p_Player->GetInvincible()) {
@@ -152,6 +161,8 @@ void Judgment::Judgment_Player_vs_Enemy(void) {
 	}
 }
 
+//BOSS表示処理
+//==================================================
 void Judgment::StartShowBoss(void) {
 	Player *p_Player = GameScene::GetPlayer();
 
@@ -167,6 +178,8 @@ void Judgment::StartShowBoss(void) {
 	}
 }
 
+//弾とBOSSの判定処理
+//==================================================
 void Judgment::Judgment_Bullet_vs_Boss(void) {
 	Boss *p_boss = GameScene::GetBoss();
 	if (!p_boss->GetActiveflag() || !BulletManager::Bullet_IsEnable()) {
@@ -205,6 +218,8 @@ void Judgment::Judgment_Bullet_vs_Boss(void) {
 	}
 }
 
+//プレーヤーとBOSSの判定処理
+//==================================================
 void Judgment::Judgment_Player_vs_Boss(void) {
 	Player *p_Player = GameScene::GetPlayer();
 	Boss *p_boss = GameScene::GetBoss();
@@ -247,7 +262,8 @@ void Judgment::Judgment_Player_vs_Boss(void) {
 	}
 }
 
-//boss big bullet
+//大きい弾とプレーヤーの判定処理
+//==================================================
 void Judgment::Judgment_BigBullet_vs_Player(void) {
 	Boss *p_boss = GameScene::GetBoss();
 	Player *p_Player = GameScene::GetPlayer();
@@ -280,6 +296,8 @@ void Judgment::Judgment_BigBullet_vs_Player(void) {
 	}
 }
 
+//アイテムとプレーヤーの判定処理
+//==================================================
 void Judgment::Judgment_Tonic_vs_Player(void) {
 	Player *p_Player = GameScene::GetPlayer();
 
@@ -319,7 +337,8 @@ void Judgment::Judgment_Tonic_vs_Player(void) {
 	}
 }
 
-//red enemy
+//弾と赤いエネミーの判定処理
+//==================================================
 void Judgment::Judgment_Bullet_vs_EnemyRed(void) {
 	//弾とエネミーは有効か？
 	if (!EnemyManager::EnemyRed_IsEnable() || !BulletManager::Bullet_IsEnable()) {
@@ -367,6 +386,8 @@ void Judgment::Judgment_Bullet_vs_EnemyRed(void) {
 
 }
 
+//プレーヤーと赤いエネミーの判定処理
+//==================================================
 void Judgment::Judgment_Player_vs_EnemyRed(void) {
 	Player *p_Player = GameScene::GetPlayer();
 	if (!EnemyManager::EnemyRed_IsEnable() || p_Player->GetInvincible()) {
@@ -412,7 +433,8 @@ void Judgment::Judgment_Player_vs_EnemyRed(void) {
 		
 }
 
-//範囲内
+//プレーヤーと赤いエネミー可視範囲の判定処理
+//==================================================
 void Judgment::Judgment_Player_vs_EnemyRedRange(void) {
 
 	EnemyRed *Enemys = EnemyManager::EnemyRedMgrGetEnemy();

@@ -1,10 +1,11 @@
 //==================================================
 //  スコアクラス [Score.cpp]        Autor:ロ
 //==================================================
-
 #include "Number.h"
 #include "Score.h"
 
+//描画処理
+//==================================================
 void Score::Score_Draw(float x, float y, int score, int fig, bool bLeft, bool bZero)
 {
 	// カンスト用の最大数値を作る
@@ -28,10 +29,14 @@ void Score::Score_Draw(float x, float y, int score, int fig, bool bLeft, bool bZ
 	}
 }
 
+// 初期化処理
+//==================================================
 void Score::Score_Init() {
 	Number::Number_Init();
 }
 
+//終了処理
+//==================================================
 void Score::Score_Uninit() {
 	Number::Number_Uninit();
 }

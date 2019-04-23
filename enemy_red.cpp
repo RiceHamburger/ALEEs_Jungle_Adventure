@@ -2,13 +2,20 @@
 #include "D3Dsetup.h"
 #include "bulletManager.h"
 
+//コンストラクタ
+//==================================================
 EnemyRed::EnemyRed() {
 
 }
+
+//デストラクタ
+//==================================================
 EnemyRed::~EnemyRed() {
 
 }
 
+// 初期化処理
+//==================================================
 void EnemyRed::InitEnemy(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, int tex_pic_numY) {
 	Circle objCollision;
 	SetPosition(pos);
@@ -54,10 +61,14 @@ void EnemyRed::InitEnemy(Vector2D pos, TEXTURE_NAME tex_name, int tex_pic_numX, 
 	thisAngle = 90;
 }
 
+//目標のインデックスを設定する
+//==================================================
 void EnemyRed::SetTargetIndex(int index) {
 	targetIndex = index;
 }
 
+//更新処理
+//==================================================
 void EnemyRed::EnemyActive() {
 	Vector2D position = GetPosition();
 
@@ -100,10 +111,14 @@ void EnemyRed::EnemyActive() {
 	}
 }
 
+//エネミーを削除処理
+//==================================================
 void EnemyRed::EnemyDestroy() {
 	SetLiveFlag(false);
 }
 
+//HP設定
+//==================================================
 void EnemyRed::SetLife(int Life) {
 	life = Life;
 	if (life <= 0) {
@@ -111,30 +126,44 @@ void EnemyRed::SetLife(int Life) {
 	}
 }
 
+//スコーア設定
+//==================================================
 void EnemyRed::SetScore(int Score) {
 	score = Score;
 }
 
+//スピード設定
+//==================================================
 void EnemyRed::SetSpeed(float Speed) {
 	speed = Speed;
 }
 
+//スピードを取る
+//==================================================
 float EnemyRed::GetSpeed() {
 	return speed;
 }
 
+//スコーアを取る
+//==================================================
 int EnemyRed::GetScore() {
 	return score;
 }
 
+//エネミー範囲を取る
+//==================================================
 RECT* EnemyRed::GetRect() {
 	return &text_rec;
 }
 
+//HPを取る
+//==================================================
 int EnemyRed::GetLife() {
 	return life;
 }
 
+//ラジアン計算処理
+//==================================================
 float EnemyRed::getRadian(float X1, float Y1, float X2, float Y2) {
 	float w = X2 - X1; // cosθ
 	float h = Y2 - Y1; // sinθ
@@ -143,18 +172,26 @@ float EnemyRed::getRadian(float X1, float Y1, float X2, float Y2) {
 	return atan2f(h, w);
 }
 
+//エネミーの体の処理値を取る
+//==================================================
 int EnemyRed::GetEnemyBodyDamage() {
 	return bodydamage;
 }
 
+//HPバー初期化処理
+//==================================================
 void EnemyRed::InitBloodSprite() {
 	D3DXCreateSprite(g_d3dDevice, &health_sprite);
 }
 
+//HPバー廃棄処理
+//==================================================
 void EnemyRed::BloodSprite_Uninit() {
 	health_sprite->Release();
 }
 
+//HPバーの描画処理
+//==================================================
 void EnemyRed::DrawBloodSprite() {
 	Vector2D Myposition = GetPosition();
 
@@ -177,6 +214,8 @@ void EnemyRed::DrawBloodSprite() {
 	health_sprite->End();
 }
 
+//エネミー攻撃処理
+//==================================================
 void EnemyRed::EnemyAttack() {
 	attackTime--;
 	if (attackTime <= 0) {
@@ -192,17 +231,22 @@ void EnemyRed::EnemyAttack() {
 	
 }
 
+//当てられたら傷害の効果を表示する時間設定
+//==================================================
 void EnemyRed::SetDamageEffect(bool sw) {
 	Effect = sw;
 	Effect_time = ENEMY_EFFECT_TIME;
 }
 
 
-//red
+//攻撃開始範囲を取る
+//==================================================
 Circle* EnemyRed::GetSeeCircleCollision() {
 	return &g_CircleSeeCollision;
 }
 
+//角度リセット処理
+//==================================================
 void EnemyRed::AngleReset(void) {
 	thisAngle = 90;
 }

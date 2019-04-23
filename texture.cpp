@@ -4,14 +4,17 @@
 #include "D3Dsetup.h"
 #include "texture.h"
 
+//ファイルネームの最大限
 #define TEXTURE_FILENAME_MAX (30)
 
+//テクスチャファイルの構造体
 typedef struct TextureFile_tag {
 	char filename[TEXTURE_FILENAME_MAX];
 	int width;
 	int height;
 }TextureFileData;
 
+//テクスチャファイルの配列
 static const TextureFileData TEXTURE_FILE_LISE[] = {
 	{ "texture/title_bg.png",1024,768 },
 	{ "texture/pressspace.png",448,56 },
@@ -40,9 +43,13 @@ static const TextureFileData TEXTURE_FILE_LISE[] = {
 	{ "texture/enemy_red.png",96,64 },
 };
 
+// 静的メンバ変数
+//==================================================
 static const int TEXTURE_MAX = ARRAYSIZE(TEXTURE_FILE_LISE);
 static LPDIRECT3DTEXTURE9 g_pTextures[TEXTURE_MAX];
 
+// テクスチャロード処理
+//==================================================
 int Texture_Load(void) {
 	HRESULT hr;
 	int failed_count = 0;
@@ -58,6 +65,8 @@ int Texture_Load(void) {
 	return failed_count;
 }
 
+//終了処理
+//==================================================
 void Texture_Release(void) {
 	for (int i = 0;i < TEXTURE_MAX;i++) {
 		if (g_pTextures[i]) {
@@ -67,13 +76,20 @@ void Texture_Release(void) {
 	}
 }
 
+//テクスチャを取る
+//==================================================
 LPDIRECT3DTEXTURE9 Texture_GetTexture(int index) {
 	return g_pTextures[index];
 }
 
+//テクスチャの広さを取る
+//==================================================
 int Texture_GetWidth(int index) {
 	return TEXTURE_FILE_LISE[index].width;
 }
+
+//テクスチャの高さを取る
+//==================================================
 int Texture_GetHeight(int index) {
 	return TEXTURE_FILE_LISE[index].height;
 }

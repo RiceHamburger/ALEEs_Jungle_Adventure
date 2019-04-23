@@ -1,7 +1,6 @@
 //==================================================
 //  タイトル画面のクラス [TitleScene.cpp]     Autor:ロ
 //==================================================
-
 #include "TitleScene.h"
 #include "texture.h"
 #include "D3DInput.h"
@@ -70,6 +69,8 @@ void TitleScene::Update() {
 	}
 }
 
+//描画処理
+//==================================================
 void TitleScene::Draw() {
 	m_UI->Sprite_Draw(TITLE, (SCREEN_WIDTH - Texture_GetWidth(TITLE)) / 2, (SCREEN_HEIGHT - Texture_GetHeight(TITLE)) / 3);
 	m_UI->Sprite_SetColor(D3DCOLOR_RGBA(255, 255, 255, btn_alpha));
@@ -77,10 +78,14 @@ void TitleScene::Draw() {
 	m_UI->Sprite_SetColor(D3DCOLOR_RGBA(255, 255, 255, 255));
 }
 
+//前回デバイス処理
+//==================================================
 void TitleScene::LostDevice() {
 	
 }
 
+//デバイスをリセット処理
+//==================================================
 void TitleScene::ResetDevice() {
 
 }

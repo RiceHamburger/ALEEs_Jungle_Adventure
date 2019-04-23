@@ -1,3 +1,6 @@
+//==================================================
+//  プレーヤークラス [player.cpp]        Autor:ロ
+//==================================================
 #include "D3DInput.h"
 #include "player.h"
 #include "bulletManager.h"
@@ -6,9 +9,13 @@
 #include "sound.h"
 #include "D3Dsetup.h"
 
+//プレーヤーの移動速度
 #define PLAYER_MOVE_SPEED (0.1f)
+//弾の速度
 #define BULLET_SPEED (1.0f)
 
+//インスタンス
+//==================================================
 Player::Player()
 {
 	score = 0;
@@ -16,11 +23,15 @@ Player::Player()
 	WalkRank = NULL;
 }
 
+//デストラクタ
+//==================================================
 Player::~Player()
 {
 	
 }
 
+//プレーヤーコントロール
+//==================================================
 void Player::PlayerControl()
 {
 	D3DXVECTOR2 vecDir(0.0f, 0.0f);
@@ -162,6 +173,8 @@ void Player::PlayerControl()
 	checkHightShoot();
 }
 
+//プレーヤーアニメーション
+//==================================================
 void Player::PlayerAni() {
 
 	if (!isMove)return;
@@ -185,6 +198,8 @@ void Player::PlayerAni() {
 	}
 }
 
+// 初期化処理
+//==================================================
 void Player::InitPlayer(Vector2D pos,PlayerState State, D3DXVECTOR2 PlayerSpeed, TEXTURE_NAME tex_name, int tex_pic_numX, int tex_pic_numY) {
 	//animation
 	textureX = 0;
@@ -232,52 +247,76 @@ void Player::InitPlayer(Vector2D pos,PlayerState State, D3DXVECTOR2 PlayerSpeed,
 	haveItem = false;
 }
 
+// 生命力設定処理
+//==================================================
 void Player::SetLife(int Life) {
 	life = Life;
 }
 
+// スコーア設定処理
+//==================================================
 void Player::SetScore(int Score) {
 	score = Score;
 }
 
+// 状態設定処理
+//==================================================
 void Player::SetState(PlayerState State) {
 	state = State;
 }
 
+// スコーアを取る
+//==================================================
 int Player::GetScore() {
 	return score;
 }
 
+// 生命力を取る
+//==================================================
 int Player::GetLife() {
 	return life;
 }
 
+// スコーアを増やす
+//==================================================
 void Player::AddScore(int addscore) {
 	score += addscore;
 }
 
+// 範囲を取る
+//==================================================
 RECT* Player::GetRect() {
 	return &text_rec;
 }
 
+// 無敵状態のフラグを設定
+//==================================================
 void Player::SetInvincible(bool sw) {
 	invincible = sw;
 }
 
+// 無敵状態のフラグを取る
+//==================================================
 bool Player::GetInvincible() {
 	return invincible;
 }
 
+// 動ける範囲の数字を設定
+//==================================================
 void Player::SetWalkRang(int* rang) {
 	WalkRank = rang;
 }
 
+// 動ける範囲計算処理
+//==================================================
 bool Player::RangCheck(float x, float y) {
 	int gx = x / 32;
 	int gy = y / 32;
 	return *(WalkRank + gy*MAP_NUM_X + gx) == 0;
 }
 
+// シューティング間隔処理
+//==================================================
 void Player::checkContinuous(void) {
 	if (renzokuShoot) {
 		canShootTime--;
@@ -289,6 +328,8 @@ void Player::checkContinuous(void) {
 	}
 }
 
+// ハイシューティングMODE設定
+//==================================================
 void Player::SetHighShoot(bool sw) {
 	canHighShoot = sw;
 	if (canHighShoot) {
@@ -296,6 +337,8 @@ void Player::SetHighShoot(bool sw) {
 	}
 }
 
+// ハイシューティング間隔処理
+//==================================================
 void Player::checkHightShoot(void) {
 	if (canHighShoot) {
 		HighShootTime--;
@@ -306,10 +349,14 @@ void Player::checkHightShoot(void) {
 	}
 }
 
+// アイテムを取った状態をチェックする
+//==================================================
 bool Player::GetItemCheck(void) {
 	return haveItem;
 }
 
+// アイテムを取った状態を設定する
+//==================================================
 void Player::SetItemCheck(bool sw) {
 	haveItem = sw;
 }

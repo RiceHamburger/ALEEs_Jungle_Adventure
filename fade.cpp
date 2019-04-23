@@ -97,6 +97,8 @@ void Fade::Draw()
 	g_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(FadeVertex));
 }
 
+//フェイト開始
+//==================================================
 void Fade::Fade_Start(bool bOut, int frame, D3DCOLOR color)
 {
 	g_bOut = bOut;
@@ -115,6 +117,8 @@ void Fade::Fade_Start(bool bOut, int frame, D3DCOLOR color)
 	}
 }
 
+//フェイト状態
+//==================================================
 bool Fade::Fade_IsFade(void)
 {
 	return g_bIsFade;

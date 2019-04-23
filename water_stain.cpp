@@ -1,7 +1,12 @@
+//==================================================
+//  水のクラス [water_stain.cpp]        Autor:ロ
+//==================================================
 #include "texture.h"
 #include "water_stain.h"
 #include "D3Dsetup.h"
 
+//コンストラクタ
+//==================================================
 WaterStain::WaterStain()
 {
 	Position = { 0,0,0 };
@@ -14,11 +19,15 @@ WaterStain::WaterStain()
 	water_rec = { 0,0,0,0 };
 }
 
+//デストラクタ
+//==================================================
 WaterStain::~WaterStain()
 {
 
 }
 
+//更新処理
+//==================================================
 void WaterStain::UpdateSprite() {
 	aniTime--;
 	if (aniTime <= 0) {
@@ -44,6 +53,8 @@ void WaterStain::UpdateSprite() {
 	}
 }
 
+//描画処理
+//==================================================
 void WaterStain::DrawSprite() {
 	sprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_OBJECTSPACE);
 
@@ -52,18 +63,26 @@ void WaterStain::DrawSprite() {
 	sprite->End();
 }
 
+// 初期化処理
+//==================================================
 void WaterStain::InitSprite() {
 	D3DXCreateSprite(g_d3dDevice, &sprite);
 }
 
+//終了処理
+//==================================================
 void WaterStain::Sprite_Uninit() {
 	sprite->Release();
 }
 
+//座標を設定処理
+//==================================================
 void WaterStain::SetPosition(D3DXVECTOR3 p_water) {
 	Position = p_water;
 }
 
+//テクスチャ設定処理
+//==================================================
 void WaterStain::SetNowTexture(int t_X, int t_Y) {
 	textureX_index = t_X;
 	textureY_index = t_Y;
