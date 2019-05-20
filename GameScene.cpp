@@ -397,7 +397,7 @@ void GameScene::loadMAP(int m, int n) {
 	std::string line;
 	
 	//ファイルを開く
-	mapFile.open("test.txt", std::ios_base::in);
+	mapFile.open("map.txt", std::ios_base::in);
 
 	//順番でマップ配列に入る
 	for (int i = 0; i < m; ++i) {
